@@ -12,7 +12,7 @@ class ActionsTest extends TestCase
 
         $this->assertStringStartsWith('text/css', $response->headers->get('Content-Type'));
         $this->assertStringContainsString('immutable', $response->headers->get('Cache-Control'));
-        $this->assertStringContainsString('.promo-bar--solid{', $response->getContent());
+        $this->assertStringContainsString(':where(.promo-bar--solid){', $response->getContent());
     }
 
     public function test_the_script(): void

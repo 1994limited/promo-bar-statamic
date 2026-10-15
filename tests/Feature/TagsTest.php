@@ -177,7 +177,7 @@ class TagsTest extends TestCase
         $html = $this->antlers('{{ promo_bar mode="rotate" }}');
 
         $this->assertStringContainsString('data-mode="rotate" data-interval="6"', $html);
-        $this->assertMatchesRegularExpression('/is-inactive" data-promo-bar data-promo-bar-id="[^"]+" data-promo-bar-name="Two"[^>]* inert aria-hidden="true">/', $html);
+        $this->assertMatchesRegularExpression('/is-inactive" data-promo-bar data-promo-bar-id="[^"]+" data-promo-bar-name="Two"[^>]* inert>/', $html);
         $this->assertStringContainsString('data-promo-bar-previous aria-label="Previous"', $html);
         $this->assertStringContainsString('data-promo-bar-pause aria-label="Pause"', $html);
     }

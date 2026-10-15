@@ -68,7 +68,6 @@
                 var inactive = bar !== active;
                 bar.classList.toggle('is-inactive', inactive);
                 bar.toggleAttribute('inert', inactive);
-                if (inactive) bar.setAttribute('aria-hidden', 'true'); else bar.removeAttribute('aria-hidden');
                 bar.classList.toggle('has-controls', eligible.length > 1);
             }
             [].slice.call(bar.querySelectorAll('[data-promo-bar-js]')).forEach(function (element) {
@@ -347,7 +346,6 @@
                 var inactive = bar !== next;
                 bar.classList.toggle('is-inactive', inactive);
                 bar.toggleAttribute('inert', inactive);
-                if (inactive) bar.setAttribute('aria-hidden', 'true'); else bar.removeAttribute('aria-hidden');
             });
 
             // Move focus to the same control on the bar now showing.

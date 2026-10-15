@@ -18,11 +18,16 @@ class StylesTest extends TestCase
         $css = $this->css();
 
         foreach (array_keys(Styles::presets()) as $preset) {
-            $this->assertStringContainsString(".promo-bar--{$preset}{--promo-bar-background:", $css);
+            $this->assertStringContainsString(":where(.promo-bar--{$preset}){--promo-bar-background:", $css);
         }
 
-        $this->assertStringContainsString('.promo-bar--gradient{--promo-bar-background:#6d28d9;--promo-bar-background-2:#be185d', $css);
+        $this->assertStringContainsString(':where(.promo-bar--gradient){--promo-bar-background:#6d28d9;--promo-bar-background-2:#be185d', $css);
         $this->assertStringContainsString('.promo-bar { display: grid; }', $css);
+    }
+
+    public function test_preset_values_have_no_specificity_so_the_sites_own_css_wins(): void
+    {
+        $this->assertStringContainsString(':where(.promo-bar--solid){--promo-bar-background:', $this->css());
     }
 
     public function test_presets_are_changed_in_the_settings(): void
@@ -31,7 +36,7 @@ class StylesTest extends TestCase
 
         $css = $this->css();
 
-        $this->assertStringContainsString('.promo-bar--solid{--promo-bar-background:#ff0000;--promo-bar-text:#000000;', $css);
+        $this->assertStringContainsString(':where(.promo-bar--solid){--promo-bar-background:#ff0000;--promo-bar-text:#000000;', $css);
         $this->assertStringContainsString('--promo-bar-font-size:1.0625rem;--promo-bar-padding:0.375rem;--promo-bar-align:flex-start;--promo-bar-text-align:start;--promo-bar-radius:0px', $css);
     }
 
@@ -43,7 +48,7 @@ class StylesTest extends TestCase
 
         $this->assertStringNotContainsString('display:none', $css);
         $this->assertStringNotContainsString('<script>', $css);
-        $this->assertStringContainsString('.promo-bar--solid{--promo-bar-background:#1d4ed8', $css);
+        $this->assertStringContainsString(':where(.promo-bar--solid){--promo-bar-background:#1d4ed8', $css);
     }
 
     public function test_a_bars_own_colours(): void

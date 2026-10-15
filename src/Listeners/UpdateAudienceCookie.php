@@ -24,6 +24,10 @@ class UpdateAudienceCookie
             return;
         }
 
+        if (! $this->cookie->wanted()) {
+            return;
+        }
+
         $user = User::fromUser($event->user);
 
         $this->cookie->queue(new Visitor(true, $user ? $user->groups()->map->handle()->values()->all() : []));

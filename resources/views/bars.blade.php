@@ -11,7 +11,7 @@
     $state = $bar['free_delivery']['state'] ?? null;
     $ctaClasses = 'promo-bar__cta'.($plausible ? ' '.$plausible['event'].' plausible-event-bar='.str_replace(' ', '+', $bar['name']) : '');
 @endphp
-    <div class="{{ $bar['classes'] }}{{ $inactive ? ' is-inactive' : '' }}" data-promo-bar data-promo-bar-id="{{ $bar['id'] }}" data-promo-bar-name="{{ $bar['name'] }}" data-promo-bar-key="{{ $bar['key'] }}"@if ($bar['ends_iso']) data-ends="{{ $bar['ends_iso'] }}"@endif{!! $bar['audience'] ? ' data-audience="'.e($bar['audience']).'"' : '' !!}{!! $bar['groups'] ? ' data-groups="'.e($bar['groups']).'"' : '' !!}{!! $bar['dismiss_days'] ? ' data-dismiss-days="'.(int) $bar['dismiss_days'].'"' : '' !!}{!! $inactive ? ' inert aria-hidden="true"' : '' !!}{!! $hidden ? ' hidden' : '' !!}>
+    <div class="{{ $bar['classes'] }}{{ $inactive ? ' is-inactive' : '' }}" data-promo-bar data-promo-bar-id="{{ $bar['id'] }}" data-promo-bar-name="{{ $bar['name'] }}" data-promo-bar-key="{{ $bar['key'] }}"@if ($bar['ends_iso']) data-ends="{{ $bar['ends_iso'] }}"@endif{!! $bar['audience'] ? ' data-audience="'.e($bar['audience']).'"' : '' !!}{!! $bar['groups'] ? ' data-groups="'.e($bar['groups']).'"' : '' !!}{!! $bar['dismiss_days'] ? ' data-dismiss-days="'.(int) $bar['dismiss_days'].'"' : '' !!}{!! $inactive ? ' inert' : '' !!}{!! $hidden ? ' hidden' : '' !!}>
 @if ($mode === 'rotate')
         <div class="promo-bar__controls" data-promo-bar-js="controls" hidden>
             <button type="button" class="promo-bar__control" data-promo-bar-previous aria-label="{{ $labels['previous'] }}"><svg aria-hidden="true" viewBox="0 0 16 16"><path d="M10.6 2.6 12 4l-4 4 4 4-1.4 1.4L5.2 8z"/></svg></button>

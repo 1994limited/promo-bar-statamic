@@ -194,7 +194,9 @@ class Styles
 
     /**
      * The stylesheet: the base rules, then each preset's values from the
-     * settings, then any bar's own colours.
+     * settings, then any bar's own colours. The presets' values are wrapped
+     * in :where(), with no specificity, so any rule in a site's own CSS
+     * changes them whatever order the stylesheets load in.
      *
      * @param  iterable<Bar>  $bars
      */
@@ -203,7 +205,7 @@ class Styles
         $css = static::baseCss();
 
         foreach (array_keys(static::presets()) as $handle) {
-            $css .= "\n.promo-bar--{$handle}{".static::properties($this->preset($handle)).'}';
+            $css .= "\n:where(.promo-bar--{$handle}){".static::properties($this->preset($handle)).'}';
         }
 
         foreach ($bars as $bar) {

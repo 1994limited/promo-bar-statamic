@@ -124,7 +124,7 @@ class BarBlueprint
                 $this->field('sites', ['type' => 'sites', 'display' => __('Sites'), 'instructions' => __('Leave empty for every site.'), 'mode' => 'select']),
             ] : []),
             $this->field('pages', ['type' => 'button_group', 'display' => __('Pages'), 'options' => ['everywhere' => __('Everywhere'), 'only' => __('Only on…'), 'except' => __('Everywhere except…')], 'default' => 'everywhere']),
-            $this->field('entries', ['type' => 'entries', 'display' => __('Entries'), 'mode' => 'stack', 'width' => 50, 'unless' => ['pages' => 'equals everywhere']]),
+            $this->field('entries', ['type' => 'entries', 'display' => __('Entries'), 'mode' => 'stack', 'create' => false, 'width' => 50, 'unless' => ['pages' => 'equals everywhere']]),
             $this->field('collections', ['type' => 'collections', 'display' => __('Collections'), 'instructions' => __('Every entry in them.'), 'mode' => 'select', 'width' => 50, 'unless' => ['pages' => 'equals everywhere']]),
             $this->field('urls', ['type' => 'textarea', 'display' => __('URLs'), 'instructions' => __('One per line, as in the address bar. Use * for “anything”: /shop/* or */sale.'), 'placeholder' => "/shop/*\n/checkout*", 'unless' => ['pages' => 'equals everywhere']]),
         ];

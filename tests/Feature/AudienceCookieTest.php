@@ -17,12 +17,22 @@ class AudienceCookieTest extends TestCase
 
     public function test_signing_in_sets_it_with_the_users_groups(): void
     {
+        $this->bar(['audience' => 'signed_in']);
         $user = $this->user('vip@example.com', groups: ['vip', 'trade']);
 
         event(new Login('web', $user, false));
 
         $this->assertSame('1:vip,trade', $this->queued()->getValue());
         $this->assertFalse($this->queued()->isHttpOnly());
+    }
+
+    public function test_signing_in_sets_nothing_when_no_bar_needs_it(): void
+    {
+        $this->bar();
+
+        event(new Login('web', $this->user(), false));
+
+        $this->assertNull($this->queued());
     }
 
     public function test_signing_out_removes_it(): void
