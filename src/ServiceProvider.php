@@ -35,8 +35,8 @@ use Statamic\Statamic;
 
 class ServiceProvider extends AddonServiceProvider
 {
-    /** The Control Panel nav icon (resources/brand/nav-icon.svg), a placeholder until the brand kit arrives. */
-    public const ICON = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path d="M1.5 5.5v3h2l5 3v-9l-5 3z" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 5a2.5 2.5 0 0 1 0 4M3.5 8.5l1 3.5h1.5l-.5-3" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    /** The Control Panel nav icon (resources/brand/nav-icon.svg). */
+    public const ICON = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path d="M2 5h2.75L12 1.75v10.5L4.75 9H2z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"></path><path d="M2 10.1h1.75L2 11.85z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"></path></svg>';
 
     protected $tags = [
         PromoBarTags::class,
