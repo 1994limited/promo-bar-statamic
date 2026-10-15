@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { barHtml, bardToHtml, clean, contrast, contrastWarnings, escape, properties } from './preview.js';
+import { barHtml, bardToHtml, clean, contrast, contrastWarnings, escape, properties, remaining } from './preview.js';
 
 test('escapes HTML', () => {
     assert.equal(escape('<b>"Hi" & \'bye\'</b>'), '&lt;b&gt;&quot;Hi&quot; &amp; &#39;bye&#39;&lt;/b&gt;');
@@ -48,4 +48,11 @@ test('draws a sample bar', () => {
     assert.match(html, /Shop &lt;now&gt;/);
     assert.match(html, /<code>SAVE10<\/code>/);
     assert.match(html, /promo-bar__dismiss/);
+});
+
+test('counts down to the end date', () => {
+    const now = Date.parse('2026-10-15T12:00:00Z');
+    assert.equal(remaining('2026-10-19T14:30:00.000Z', {}, now), '4d 02h 30m');
+    assert.equal(remaining('2026-10-15T11:00:00Z', {}, now), '00h 00m');
+    assert.equal(remaining(null, {}, now), null);
 });

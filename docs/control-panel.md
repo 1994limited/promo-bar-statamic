@@ -1,5 +1,7 @@
 # Making bars
 
+![Content → Promo Bars: five bars with their status, dates, where they show and style](images/cp-bars.png)
+
 Bars live under **Content → Promo Bars**. The list shows each bar's status (Live, Scheduled, Ended or Off), its dates, where it shows and its style. Switch a bar on or off from the list, and use each row's menu to edit, duplicate, move or delete it.
 
 ## Order
@@ -9,6 +11,8 @@ When more than one bar is live on a page, their order decides what shows: the to
 ## A bar's fields
 
 The form has a live preview at the top, in the bar's style.
+
+![Editing the Autumn sale bar, with its preview](images/cp-bar.png)
 
 ### Content
 
@@ -26,6 +30,8 @@ The form has a live preview at the top, in the bar's style.
 - **Starts** and **Ends**, to the minute, in your site's timezone (`APP_TIMEZONE`). Leave both empty to show the bar until you switch it off. A bar that hasn't started or has ended isn't in the page at all.
 
 ### Where
+
+![The Where tab: only on the products collection, /shop and /basket](images/cp-where.png)
 
 - **Sites** (multisite only): leave empty for every site.
 - **Pages**: everywhere, only on some pages, or everywhere except some. "Some" is any of:

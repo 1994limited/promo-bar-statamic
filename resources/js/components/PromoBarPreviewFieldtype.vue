@@ -81,6 +81,7 @@ const samples = computed(() => {
             cta: v.cta_label,
             code,
             countdown: v.countdown ? v.countdown_label || words.value.countdown : null,
+            ends: v.ends_at,
             progress,
             dismissible: v.dismissible !== false,
             words: words.value,

@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use NineteenNinetyFour\PromoBar\Bar;
 use NineteenNinetyFour\PromoBar\Blueprints\BarBlueprint;
+use NineteenNinetyFour\PromoBar\Integrations\Cargo;
 use NineteenNinetyFour\PromoBar\PromoBars;
 use NineteenNinetyFour\PromoBar\ServiceProvider;
 use NineteenNinetyFour\PromoBar\Styles;
@@ -27,7 +28,7 @@ class BarsController extends CpController
     /** Fields the form has that aren't kept. */
     protected const NOT_SAVED = ['preview', 'style_preview'];
 
-    public function __construct(Request $request, protected PromoBars $bars, protected Styles $styles)
+    public function __construct(Request $request, protected PromoBars $bars, protected Styles $styles, protected Cargo $cargo)
     {
         parent::__construct($request);
     }
@@ -181,7 +182,7 @@ class BarsController extends CpController
         return [
             'id' => $bar->id(),
             'title' => $bar->title(),
-            'message' => $this->plain($bar->get('message')),
+            'message' => $this->message($bar),
             'status' => $status->value,
             'status_label' => $status->label(),
             'enabled' => $bar->enabled(),
@@ -213,6 +214,20 @@ class BarsController extends CpController
             'signed_in' => $where.' · '.__('signed in'),
             default => $where,
         };
+    }
+
+    /**
+     * The message as plain text, with the free delivery amount filled in.
+     */
+    protected function message(Bar $bar): string
+    {
+        $message = $this->plain($bar->get('message'));
+
+        if ($bar->get('free_delivery') && ($threshold = $this->cargo->threshold($bar)) !== null) {
+            $message = str_replace(':threshold', $this->cargo->money($threshold), $message);
+        }
+
+        return $message;
     }
 
     /**

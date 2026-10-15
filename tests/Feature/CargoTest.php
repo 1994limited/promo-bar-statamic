@@ -8,6 +8,7 @@ use NineteenNinetyFour\PromoBar\Blueprints\BarBlueprint;
 use NineteenNinetyFour\PromoBar\Integrations\Cargo;
 use NineteenNinetyFour\PromoBar\Tests\CargoTestCase;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Statamic\Facades\User;
 
 #[RunTestsInSeparateProcesses]
 class CargoTest extends CargoTestCase
@@ -86,6 +87,16 @@ class CargoTest extends CargoTestCase
         $this->assertStringContainsString('value="32"', $html);
         $this->assertStringContainsString('data-promo-bar-message hidden>', $html);
         $this->assertStringNotContainsString('data-fetch', $html);
+    }
+
+    public function test_the_control_panel_list_fills_in_the_threshold(): void
+    {
+        $this->bar(['free_delivery' => true, 'free_delivery_threshold' => 5000], 'Free delivery over :threshold');
+        $this->setTestRoles(['editor' => ['access cp', 'view promo bars']]);
+        $user = User::make()->email('editor@example.com')->assignRole('editor');
+        $user->save();
+
+        $this->actingAs($user)->get(cp_route('promo-bar.index'))->assertInertia(fn ($page) => $page->where('bars.0.message', 'Free delivery over £50.00'));
     }
 
     public function test_the_state_endpoint(): void

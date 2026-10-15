@@ -2,6 +2,8 @@
 
 Announcement and promo bars for your site's marketing: a sale with a countdown and a discount code, free delivery once the basket reaches £40, early access for members. You make them in the Control Panel, and they show and hide when their dates say.
 
+![Harbour Coffee's shop, with a sale bar counting down, free delivery progress and a newsletter bar](docs/images/shop.png)
+
 Bars are drawn on the server, so the page doesn't jump, they work without JavaScript, and search engines see them. They're safe behind full static caching: anything that depends on the visitor (signed in or not, what they've dismissed, their basket) is settled in their browser.
 
 ## Features
@@ -16,6 +18,12 @@ Bars are drawn on the server, so the page doesn't jump, they work without JavaSc
 - **Cargo shops.** With [Cargo](https://builtwithcargo.dev), show how far the basket is from free delivery ("£12.00 away from free delivery") with a progress bar, and take discount codes straight from Cargo's discounts. Bars end when their discount does.
 - **Accessible.** A labelled region, real buttons with clear names, focus kept in place, a pause button when rotating, and no movement for visitors who prefer reduced motion.
 - **One tag.** `{{ promo_bar }}` in your layout, or `<s:promo_bar />` in Blade. Every example in the docs has both.
+
+| For signed-in members | Content → Promo Bars | Editing, with a live preview |
+| --- | --- | --- |
+| ![A members-only bar for a signed-in customer](docs/images/member.png) | ![The list of bars, in priority order](docs/images/cp-bars.png) | ![Editing a bar, with its preview](docs/images/cp-bar.png) |
+
+The screenshots are from Harbour Coffee, a made-up shop built with Cargo and Promo Bar. **[Try the demo](https://github.com/1994limited/promo-bar-statamic-demo)**: it runs locally in a few commands, with no licence needed. See [The demo shop](docs/demo.md).
 
 ## Requirements
 
