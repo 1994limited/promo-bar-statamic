@@ -61,14 +61,16 @@ class Transfer extends Command
             return self::SUCCESS;
         }
 
-        if (! $this->option('force') && ! $this->confirm("Copy {$bars->count()} bars from {$from} to {$to}? Bars with the same ID there are replaced.", true)) {
+        $count = $bars->count().' '.str('bar')->plural($bars->count());
+
+        if (! $this->option('force') && ! $this->confirm("Copy {$count} from {$from} to {$to}? Bars with the same ID there are replaced.", true)) {
             return self::FAILURE;
         }
 
         $this->withProgressBar($bars, fn ($bar) => $target->save($bar));
         $this->newLine(2);
 
-        $this->components->info("Copied {$bars->count()} bars to the {$to} driver. Set PROMO_BAR_DRIVER={$to} to use them.");
+        $this->components->info("Copied {$count} to the {$to} driver. Set PROMO_BAR_DRIVER={$to} to use them.");
 
         return self::SUCCESS;
     }

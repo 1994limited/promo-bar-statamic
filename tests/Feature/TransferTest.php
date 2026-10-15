@@ -37,7 +37,10 @@ class TransferTest extends TestCase
         $this->assertSame($a->get('message'), $database->find($a->id())->get('message'));
 
         app(StacheBarRepository::class)->delete($b);
-        $this->artisan('promo-bar:transfer', ['--from' => 'database', '--to' => 'file', '--force' => true])->assertSuccessful();
+        app(EloquentBarRepository::class)->delete($a);
+        $this->artisan('promo-bar:transfer', ['--from' => 'database', '--to' => 'file', '--force' => true])
+            ->expectsOutputToContain('Copied 1 bar to the file driver')
+            ->assertSuccessful();
 
         $this->assertNotNull(app(StacheBarRepository::class)->find($b->id()));
     }

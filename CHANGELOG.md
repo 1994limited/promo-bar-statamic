@@ -13,3 +13,4 @@
 - **Cargo**: free delivery progress, and codes from Cargo's discounts.
 - **File and database storage**, with `promo-bar:transfer` between them.
 - `{{ promo_bar }}` and `{{ promo_bar:assets }}` tags, with Blade versions, and a publishable view.
+- Needs Statamic 6.35 or later.

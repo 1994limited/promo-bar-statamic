@@ -3,7 +3,7 @@
 ## Requirements
 
 - PHP 8.3 or later.
-- Statamic 6. Control Panel permissions, and more than one user, need Statamic Pro. Bars work without it.
+- Statamic 6.35 or later. Control Panel permissions, and more than one user, need Statamic Pro. Bars work without it.
 - For free delivery progress and codes from discounts: [Cargo](https://builtwithcargo.dev) 1.15 or later (optional).
 
 ## Installing

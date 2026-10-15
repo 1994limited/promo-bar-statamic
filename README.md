@@ -19,7 +19,7 @@ Bars are drawn on the server, so the page doesn't jump, they work without JavaSc
 
 ## Requirements
 
-- Statamic 6, PHP 8.3 or later.
+- Statamic 6.35 or later, PHP 8.3 or later.
 - Statamic Pro for Control Panel permissions and more than one user. Bars work without it.
 - For the free delivery progress and Cargo codes: [Cargo](https://builtwithcargo.dev) 1.15 or later.
 
