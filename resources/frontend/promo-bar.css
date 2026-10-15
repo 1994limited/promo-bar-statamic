@@ -12,11 +12,12 @@
 
 .promo-bar { display: grid; }
 .promo-bar[data-sticky] { position: sticky; top: 0; z-index: 50; }
-.promo-bar__bar[hidden], .promo-bar [data-promo-bar-js][hidden] { display: none !important; }
+.promo-bar[hidden], .promo-bar [hidden] { display: none !important; }
 
 /* Rotating bars share one place, as tall as the tallest, so the page doesn't move. */
-.promo-bar--rotate > .promo-bar__bar { grid-area: 1 / 1; transition: opacity 0.3s ease, visibility 0.3s; }
-.promo-bar--rotate > .promo-bar__bar.is-inactive { visibility: hidden; opacity: 0; }
+/* Showing is instant (so it can take focus straight away); hiding waits for the fade. */
+.promo-bar--rotate > .promo-bar__bar { grid-area: 1 / 1; transition: opacity 0.3s ease; }
+.promo-bar--rotate > .promo-bar__bar.is-inactive { visibility: hidden; opacity: 0; transition: opacity 0.3s ease, visibility 0s linear 0.3s; }
 
 .promo-bar__visually-hidden {
     position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;

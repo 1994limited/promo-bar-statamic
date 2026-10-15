@@ -50,7 +50,7 @@ class SettingsBlueprint
         $sections = [[
             'instructions' => __('Each preset’s colours and sizes. Every bar using a preset changes with it; a bar can also have its own colours.'),
             'fields' => [
-                $this->field('styles_preview', ['type' => 'promo_bar_preview', 'display' => __('Preview'), 'hide_display' => true, 'mode' => 'settings']),
+                $this->field('styles_preview', ['type' => 'promo_bar_preview', 'display' => __('Preview'), 'hide_display' => true, 'full_width_setting' => true, 'mode' => 'settings']),
             ],
         ]];
 
@@ -64,6 +64,7 @@ class SettingsBlueprint
                         'type' => 'group',
                         'display' => Styles::labels()[$handle],
                         'hide_display' => true,
+                        'full_width_setting' => true,
                         'fullscreen' => false,
                         'border' => false,
                         'fields' => $this->presetFields($handle, $preset),

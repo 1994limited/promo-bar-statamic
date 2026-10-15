@@ -74,7 +74,7 @@
             [].slice.call(bar.querySelectorAll('[data-promo-bar-js]')).forEach(function (element) {
                 var kind = element.getAttribute('data-promo-bar-js');
                 if (kind === 'controls') element.hidden = eligible.length < 2;
-                else if (kind === 'copy') element.hidden = !(navigator.clipboard && window.isSecureContext);
+                else if (kind === 'copy') element.hidden = !((navigator.clipboard && window.isSecureContext) || document.queryCommandSupported && document.queryCommandSupported('copy'));
                 else element.hidden = false;
             });
             [].slice.call(bar.querySelectorAll('[data-promo-bar-fallback]')).forEach(function (element) {
@@ -242,11 +242,26 @@
         if (next) next.focus();
     }
 
+    // Where the clipboard API is refused, select the code and copy that.
+    function copySelection(code) {
+        var range = document.createRange();
+        range.selectNodeContents(code);
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        var copied = false;
+        try { copied = document.execCommand('copy'); } catch (e) { /* leave it selected */ }
+        return copied ? Promise.resolve() : Promise.reject();
+    }
+
     function copy(bar, button) {
         var code = bar.querySelector('[data-promo-bar-code]');
-        if (!code || !navigator.clipboard) return;
+        if (!code) return;
 
-        navigator.clipboard.writeText(code.textContent.trim()).then(function () {
+        var text = code.textContent.trim();
+        var write = navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject();
+
+        write.catch(function () { return copySelection(code); }).then(function () {
             var status = bar.querySelector('[data-promo-bar-status]');
             button.textContent = button.getAttribute('data-copied-label');
             if (status) status.textContent = button.getAttribute('data-copied-label');
@@ -256,7 +271,7 @@
                 if (status) status.textContent = '';
             }, 2000);
             emit('copy', bar);
-        });
+        }, function () { /* The code is left selected to copy by hand. */ });
     }
 
     /*
