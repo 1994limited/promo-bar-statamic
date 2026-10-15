@@ -27,6 +27,8 @@ class PromoBarPreview extends Fieldtype
         return [
             'mode' => $this->config('mode', 'bar'),
             'css' => Styles::baseCss(),
+            'phone_css' => Styles::phoneCss(),
+            'phone_width' => $settings->phoneWidth(),
             'presets' => collect(array_keys(Styles::presets()))->mapWithKeys(fn ($handle) => [$handle => $styles->preset($handle)])->all(),
             'defaults' => Styles::presets(),
             'labels' => Styles::labels(),

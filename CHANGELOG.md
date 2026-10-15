@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0 (unreleased)
+
+### Added
+- **Phones.** Bars are smaller and tighter on phones, with the countdown in its two largest units ("4d 01h"). Each bar can have a shorter **phone message**, leave out its **countdown, code or button** on phones, or **not show on phones** at all. Stacked bars show only the first on phones. The phone width (640px) and the stacked-bars option are in **Settings → General → Phones**. It's all CSS, so it works on cached pages and without JavaScript.
+- **A Desktop / Phone switch** on the Control Panel's previews.
+
+
 ## 1.0.0 (2026-10-15)
 
 ### Added

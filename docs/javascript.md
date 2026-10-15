@@ -45,7 +45,7 @@ If you [publish the view](templates.md#changing-the-markup), keep these:
 
 | Attribute | On | |
 | --- | --- | --- |
-| `data-promo-bar-group` | The wrapper | With `data-mode`, `data-interval` and `data-audience-cookie`. |
+| `data-promo-bar-group` | The wrapper | With `data-mode`, `data-interval`, `data-phone-width` and `data-audience-cookie`. |
 | `data-promo-bar` | Each bar | With `data-promo-bar-id`, `data-promo-bar-name`, `data-promo-bar-key` (for dismissing), and as needed `data-ends`, `data-audience`, `data-groups`, `data-dismiss-days`. |
 | `data-promo-bar-js` | Things only the script can use | Hidden until it runs: `dismiss`, `copy`, `controls`, `countdown`. |
 | `data-promo-bar-dismiss`, `-copy`, `-cta` | Buttons and the link | What a click does. |

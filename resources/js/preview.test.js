@@ -56,3 +56,9 @@ test('counts down to the end date', () => {
     assert.equal(remaining('2026-10-15T11:00:00Z', {}, now), '00h 00m');
     assert.equal(remaining(null, {}, now), null);
 });
+
+test('counts down in two units on phones', () => {
+    const now = Date.parse('2026-10-15T12:00:00Z');
+    assert.equal(remaining('2026-10-19T14:30:00.000Z', {}, now, true), '4d 02h');
+    assert.equal(remaining('2026-10-15T15:12:00.000Z', {}, now, true), '03h 12m');
+});

@@ -23,6 +23,7 @@ The form has a live preview at the top, in the bar's style.
 - **Count down to the end**: a live countdown to the end date (set under Schedule). Without JavaScript, the end date shows instead. The countdown's label can be changed for this bar.
 - **Discount code**: none, a code you type, or (with Cargo) a Cargo discount's code. It shows with a Copy button.
 - **Free delivery** (with Cargo): see [Cargo](cargo.md).
+- **On phones**: phones get a smaller bar (see [Phones](#phones)). Turn off **Show on phones** for a bar that's only for bigger screens, give it a shorter **Phone message**, and choose whether its **Countdown**, **Code** and **Button** show on phones.
 - **Visitors can dismiss it**: a close button. A dismissed bar stays hidden in that visitor's browser, comes back after the number of days you set (or never, if empty), and comes back anyway when you change its message, button, code or end date.
 
 ### Schedule
@@ -46,6 +47,22 @@ Who's signed in is worked out in the visitor's browser (from a small cookie) so 
 
 - **Style**: one of the presets, or the default chosen in the settings. See [Styles](styles.md).
 - **Own colours**: change this bar's background, text and button colours without changing the preset.
+
+## Phones
+
+A bar that fits one line on a laptop can take four on a phone. On screens up to the phone width in the settings (640px unless you change it), bars are smaller and tighter, the countdown shows its two largest units ("4d 01h"), and "Use code" is left to screen readers. On top of that, each bar can:
+
+- **Use a phone message**: "**Autumn sale:** 20% off" in place of "**Autumn sale:** 20% off every bag of beans". `:threshold` works here too.
+- **Leave out its countdown, code or button.** A sale bar might keep its button and leave the code to the page it links to.
+- **Not show on phones at all.**
+
+With bars stacked, phones show only the first one the visitor can see (turn this off under **Settings → General → Phones**). Rotating bars already show one at a time.
+
+The form's preview has a **Desktop / Phone** switch, to see each.
+
+![The Autumn sale bar on a phone: its phone message, a short countdown, the code and the button on two lines](images/shop-mobile.png)
+
+Both messages are in the page, and the stylesheet picks which shows, so it works on cached pages and without JavaScript, and nothing jumps. Screen readers read only the one shown.
 
 ## Settings
 

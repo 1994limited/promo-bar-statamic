@@ -214,7 +214,7 @@ class TagsTest extends TestCase
 
         $html = $this->antlers('{{ promo_bar mode="stack" limit="1" sticky="true" class="site-promos" label="Offers" }}');
 
-        $this->assertStringContainsString('class="promo-bar promo-bar--stack site-promos" aria-label="Offers"', $html);
+        $this->assertStringContainsString('class="promo-bar promo-bar--stack promo-bar--phone-first site-promos" aria-label="Offers"', $html);
         $this->assertStringContainsString(' data-sticky>', $html);
         $this->assertStringNotContainsString('data-promo-bar-name="Two"', $html);
     }

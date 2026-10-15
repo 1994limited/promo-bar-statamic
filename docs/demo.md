@@ -8,7 +8,7 @@ It has five bars:
 
 | Bar | Shows |
 | --- | --- |
-| Autumn sale | A countdown, a code with a Copy button, and a button. Solid. |
+| Autumn sale | A countdown, a code with a Copy button, and a button, with a shorter message on phones. Solid. |
 | Free delivery | Progress towards free delivery from a Cargo free shipping discount, on the shop and basket pages only. Subtle. |
 | Members early access | Only for signed-in members (the Members user group). Dark. |
 | Newsletter | Only for guests; comes back 30 days after it's dismissed. Minimal. |

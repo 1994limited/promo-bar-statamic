@@ -53,6 +53,9 @@ abstract class TestCase extends AddonTestCase
         $this->clearSettings();
         $this->beforeApplicationDestroyed(fn () => $this->clearSettings());
 
+        // User groups are saved to the test app's resources too.
+        $this->beforeApplicationDestroyed(fn () => @unlink(resource_path('users/groups.yaml')));
+
         Collection::make('pages')->routes('/{slug}')->save();
         Collection::make('products')->routes('/shop/{slug}')->save();
     }

@@ -1,0 +1,31 @@
+/*
+ * Promo Bar on phones: added inside a media query for the phone width set
+ * in the settings (640px by default). A bar's phone message replaces its
+ * message; parts a bar leaves out on phones are hidden; and themed bars
+ * get smaller and tighter.
+ */
+
+.promo-bar--phone-hidden { display: none !important; }
+.promo-bar__message--wide { display: none; }
+.promo-bar__message--phone { display: block; }
+
+.promo-bar--phone-no-countdown .promo-bar__countdown,
+.promo-bar--phone-no-code .promo-bar__code,
+.promo-bar--phone-no-button .promo-bar__cta { display: none; }
+
+/* Stacked bars: only the first one this visitor can see. */
+.promo-bar--phone-first > .promo-bar__bar:not([hidden]):not(.promo-bar--phone-hidden) ~ .promo-bar__bar { display: none; }
+
+.promo-bar--themed { font-size: calc(var(--promo-bar-font-size, 0.9375rem) * 0.9); line-height: 1.35; }
+.promo-bar--themed .promo-bar__inner { gap: 0.125rem 0.5rem; padding: calc(var(--promo-bar-padding, 0.625rem) * 0.7) 0.75rem; }
+.promo-bar--themed.promo-bar--dismissible .promo-bar__inner { padding-inline-end: 2.5rem; }
+.promo-bar--themed .promo-bar__code > span:first-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+.promo-bar--themed .promo-bar__code { gap: 0.25rem; }
+.promo-bar--themed .promo-bar__code code { padding: 0 0.35em; }
+.promo-bar--themed .promo-bar__copy { padding: 0 0.45em; }
+.promo-bar--themed .promo-bar__cta { padding: 0.15em 0.65em; border-width: 1.5px; }
+.promo-bar--themed .promo-bar__dismiss { inset-inline-end: 0.25rem; width: 1.75rem; height: 1.75rem; font-size: 1rem; }
+.promo-bar--themed .promo-bar__meter { width: 4.5rem; }
+
+.promo-bar--themed.has-controls .promo-bar__inner { padding-inline-start: 0.75rem; padding-bottom: 2.25rem; }
+.promo-bar--themed .promo-bar__controls { top: auto; bottom: 0.125rem; transform: none; inset-inline-start: 50%; translate: -50% 0; }

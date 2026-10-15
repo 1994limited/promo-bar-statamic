@@ -42,13 +42,19 @@ class Presenter
             $style !== Styles::NONE ? 'promo-bar--themed' : null,
             $buttonStyle ? 'promo-bar--button-'.$buttonStyle : null,
             $dismissible ? 'promo-bar--dismissible' : null,
+            ! $bar->onPhones() ? 'promo-bar--phone-hidden' : null,
+            ! $bar->onPhones('countdown') ? 'promo-bar--phone-no-countdown' : null,
+            ! $bar->onPhones('code') ? 'promo-bar--phone-no-code' : null,
+            ! $bar->onPhones('button') ? 'promo-bar--phone-no-button' : null,
         ]);
 
         $freeDelivery = $this->freeDelivery($bar, $visitor, $now);
         $message = $this->message($bar);
+        $phoneMessage = $bar->onPhones() ? $this->message($bar, 'phone_message') : '';
 
         if ($freeDelivery) {
             $message = str_replace(':threshold', e($freeDelivery['threshold_formatted']), $message);
+            $phoneMessage = str_replace(':threshold', e($freeDelivery['threshold_formatted']), $phoneMessage);
         }
 
         return [
@@ -58,6 +64,7 @@ class Presenter
             'style' => $style,
             'classes' => implode(' ', $classes),
             'message' => $message,
+            'phone_message' => $phoneMessage !== '' ? $phoneMessage : null,
             'cta' => $this->cta($bar),
             'countdown' => $bar->get('countdown') && $ends ? [
                 'label' => (string) $bar->get('countdown_label', $this->settings->text('countdown_label')),
@@ -76,16 +83,20 @@ class Presenter
         ];
     }
 
-    public function message(Bar $bar): string
+    public function message(Bar $bar, string $field = 'message'): string
     {
-        $value = $bar->get('message');
+        $value = $bar->get($field);
+
+        if ($value === null) {
+            return '';
+        }
 
         if (is_string($value)) {
             return e($value);
         }
 
         try {
-            return static::sanitize(trim((string) $this->field('message', $value)));
+            return static::sanitize(trim((string) $this->field($field, $value)));
         } catch (Throwable $e) {
             report($e);
 

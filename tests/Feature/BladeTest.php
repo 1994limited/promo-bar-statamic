@@ -26,7 +26,7 @@ class BladeTest extends TestCase
 
         $this->assertLessThan(strpos($html, '<body>'), strpos($html, 'promo-bar.css'));
         $this->assertSame(1, substr_count($html, 'promo-bar.js?v='));
-        $this->assertStringContainsString('class="promo-bar promo-bar--stack site-promos"', $html);
+        $this->assertStringContainsString('class="promo-bar promo-bar--stack promo-bar--phone-first site-promos"', $html);
         $this->assertStringContainsString('First &lt;bar&gt;', $html);
         $this->assertStringContainsString('data-promo-bar-name="Two"', $html);
     }

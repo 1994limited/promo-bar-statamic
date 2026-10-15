@@ -25,7 +25,7 @@ class MultisiteTest extends TestCase
         Site::setSites([
             'en' => ['name' => 'English', 'url' => 'http://localhost/', 'locale' => 'en_GB'],
             'fr' => ['name' => 'French', 'url' => 'http://localhost/fr/', 'locale' => 'fr_FR'],
-        ])->save();
+        ]);
 
         Collection::find('pages')->sites(['en', 'fr'])->save();
 

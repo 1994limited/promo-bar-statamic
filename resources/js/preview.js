@@ -133,26 +133,31 @@ export function contrastWarnings(values, style) {
 /**
  * Time left until an end date, as the site shows it (without seconds).
  */
-export function remaining(ends, units = {}, now = Date.now()) {
+export function remaining(ends, units = {}, now = Date.now(), short = false) {
     const end = typeof ends === 'string' || typeof ends === 'number' ? Date.parse(ends) : NaN;
     if (Number.isNaN(end)) return null;
     const total = Math.max(0, Math.floor((end - now) / 60000));
     const days = Math.floor(total / 1440);
     const pad = (n) => String(n).padStart(2, '0');
     const parts = [];
+    if (short) {
+        return days
+            ? `${days}${units.d ?? 'd'} ${pad(Math.floor((total % 1440) / 60))}${units.h ?? 'h'}`
+            : `${pad(Math.floor((total % 1440) / 60))}${units.h ?? 'h'} ${pad(total % 60)}${units.m ?? 'm'}`;
+    }
     if (days) parts.push(days + (units.d ?? 'd'));
     parts.push(pad(Math.floor((total % 1440) / 60)) + (units.h ?? 'h'), pad(total % 60) + (units.m ?? 'm'));
     return parts.join(' ');
 }
 
-export function barHtml({ style, values, message, cta, code, countdown, ends, progress, dismissible, words }) {
+export function barHtml({ style, values, message, cta, code, countdown, ends, progress, dismissible, words, phone = false }) {
     const themed = style !== 'none';
     const classes = ['promo-bar__bar', `promo-bar--${style}`];
     if (themed) classes.push('promo-bar--themed', `promo-bar--button-${values.button_style}`);
     if (dismissible) classes.push('promo-bar--dismissible');
 
     let inner = `<div class="promo-bar__message">${message || '&nbsp;'}</div>`;
-    if (countdown) inner += `<p class="promo-bar__countdown">${escape(countdown)} <span data-promo-bar-remaining>${escape(remaining(ends, words.units) ?? `2${words.units?.d ?? 'd'} 04${words.units?.h ?? 'h'} 12${words.units?.m ?? 'm'}`)}</span></p>`;
+    if (countdown) inner += `<p class="promo-bar__countdown">${escape(countdown)} <span data-promo-bar-remaining>${escape(remaining(ends, words.units, Date.now(), phone) ?? `2${words.units?.d ?? 'd'} 04${words.units?.h ?? 'h'} 12${words.units?.m ?? 'm'}`)}</span></p>`;
     if (progress) inner += `<p class="promo-bar__progress"><span>${escape(progress)}</span><progress class="promo-bar__meter" max="100" value="60"></progress></p>`;
     if (code) inner += `<p class="promo-bar__code"><span>${escape(words.code)}</span> <code>${escape(code)}</code> <button type="button" class="promo-bar__copy">${escape(words.copy)}</button></p>`;
     if (cta) inner += `<a class="promo-bar__cta" href="#">${escape(cta)}</a>`;

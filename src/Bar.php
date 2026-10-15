@@ -200,6 +200,17 @@ class Bar
         return array_values(array_filter((array) $this->get('sites', []), 'is_string'));
     }
 
+    /**
+     * Whether it shows on phones, and which of its parts do. A part not
+     * set (as on bars saved before 1.1) shows.
+     */
+    public function onPhones(string $part = 'show'): bool
+    {
+        $value = $this->data['phone_'.$part] ?? null;
+
+        return $value === null || $value === '' ? true : (bool) $value;
+    }
+
     public function showsOnSite(string $site): bool
     {
         $sites = $this->sites();
@@ -247,7 +258,7 @@ class Bar
     {
         $content = array_intersect_key($this->data, array_flip([
             'message', 'cta_label', 'cta_url', 'code_source', 'code', 'cargo_discount',
-            'free_delivery', 'free_delivery_threshold', 'free_delivery_discount', 'ends_at',
+            'free_delivery', 'free_delivery_threshold', 'free_delivery_discount', 'ends_at', 'phone_message',
         ]));
 
         return substr(md5(json_encode($content)), 0, 8);

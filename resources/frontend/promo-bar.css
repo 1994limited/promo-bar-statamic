@@ -178,7 +178,5 @@
 
 .promo-bar--themed .promo-bar__control svg, .promo-bar--themed .promo-bar__dismiss svg { width: 1rem; height: 1rem; fill: currentColor; }
 
-@media (max-width: 40rem) {
-    .promo-bar--themed.has-controls .promo-bar__inner { padding-inline-start: 1rem; padding-bottom: 2.75rem; }
-    .promo-bar--themed .promo-bar__controls { top: auto; bottom: 0.25rem; transform: none; inset-inline-start: 50%; translate: -50% 0; }
-}
+/* Phones: see promo-bar-phone.css, added under a media query for the phone width in the settings. */
+.promo-bar__message--phone { display: none; }

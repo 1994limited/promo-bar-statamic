@@ -96,6 +96,27 @@ class BarBlueprint
         }
 
         $sections[] = [
+            'display' => __('On phones'),
+            'instructions' => __('Phones get a smaller bar. Keep it short: a shorter message, and only what matters most.'),
+            'fields' => [
+                $this->field('phone_show', ['type' => 'toggle', 'display' => __('Show on phones'), 'default' => true]),
+                $this->field('phone_message', [
+                    'type' => 'bard',
+                    'display' => __('Phone message'),
+                    'instructions' => __('Shown on phones instead of the message. Leave empty to use the message.'),
+                    'buttons' => ['bold', 'italic', 'anchor'],
+                    'inline' => true,
+                    'smart_typography' => true,
+                    'remove_empty_nodes' => 'trim',
+                    'if' => ['phone_show' => 'equals true'],
+                ]),
+                $this->field('phone_countdown', ['type' => 'toggle', 'display' => __('Countdown'), 'default' => true, 'width' => 33, 'if' => ['phone_show' => 'equals true']]),
+                $this->field('phone_code', ['type' => 'toggle', 'display' => __('Code'), 'default' => true, 'width' => 33, 'if' => ['phone_show' => 'equals true']]),
+                $this->field('phone_button', ['type' => 'toggle', 'display' => __('Button'), 'default' => true, 'width' => 33, 'if' => ['phone_show' => 'equals true']]),
+            ],
+        ];
+
+        $sections[] = [
             'display' => __('Dismissing'),
             'fields' => [
                 $this->field('dismissible', ['type' => 'toggle', 'display' => __('Visitors can dismiss it'), 'instructions' => __('Remembered in their browser. Changing the message shows it again.'), 'default' => true, 'width' => 50]),

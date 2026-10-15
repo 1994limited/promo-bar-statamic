@@ -29,6 +29,8 @@ class Settings
             'sticky' => false,
             'default_style' => 'solid',
             'dismiss_days' => null,
+            'phone_width' => 640,
+            'phone_first_only' => true,
             'region_label' => __('Announcements'),
             'dismiss_label' => __('Dismiss'),
             'countdown_label' => __('Ends in'),
@@ -84,6 +86,16 @@ class Settings
         }
 
         return is_string($value) ? trim($value) : $value;
+    }
+
+    /**
+     * The widest screen, in CSS pixels, counted as a phone.
+     */
+    public function phoneWidth(): int
+    {
+        $width = $this->get('phone_width');
+
+        return is_numeric($width) ? max(320, min(1200, (int) $width)) : 640;
     }
 
     public function text(string $key): string

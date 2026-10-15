@@ -124,6 +124,10 @@ php artisan vendor:publish --tag=promo-bar-views
 
 It's copied to `resources/views/vendor/promo-bar/bars.blade.php`. Keep the `data-promo-bar-*` attributes: the script reads them. For colours and spacing, you don't need to: see [Styles](styles.md).
 
+## Phones
+
+On screens up to the phone width set under **Settings → General → Phones** (640px by default), bars are smaller, and each bar's phone options apply: its phone message, the parts it leaves out, or not showing at all. With `mode="stack"`, only the first bar shows on phones (unless that's turned off in the settings). See [Making bars](control-panel.md#phones).
+
 ## Without JavaScript
 
 Without the script, bars still show (the first, or all of them stacked), with their message, button, code and end date. Visitors can't dismiss them, codes have no Copy button (the code can still be selected), bars for signed-in visitors or guests only stay hidden on cached pages, and free delivery shows the bar's message rather than the basket's progress.

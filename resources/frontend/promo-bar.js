@@ -34,7 +34,8 @@
         return { groups: value.indexOf(':') > -1 ? value.slice(value.indexOf(':') + 1).split(',') : [] };
     }
 
-    function promoBarEligible(bar, now, dismissed, audience) {
+    function promoBarEligible(bar, now, dismissed, audience, phone) {
+        if (phone && bar.classList.contains('promo-bar--phone-hidden')) return false;
         var ends = Date.parse(bar.getAttribute('data-ends') || '');
         if (ends && ends <= now) return false;
         var until = dismissed[bar.getAttribute('data-promo-bar-key')];
@@ -55,8 +56,10 @@
         var dismissed = promoBarDismissed();
         var audience = promoBarAudience(group.getAttribute('data-audience-cookie') || 'promo_bar_audience');
         var mode = group.getAttribute('data-mode');
+        var width = parseInt(group.getAttribute('data-phone-width') || '0', 10);
+        var phone = width > 0 && window.matchMedia && window.matchMedia('(max-width: ' + width + 'px)').matches;
         var bars = [].slice.call(group.querySelectorAll('[data-promo-bar]'));
-        var eligible = bars.filter(function (bar) { return promoBarEligible(bar, now, dismissed, audience); });
+        var eligible = bars.filter(function (bar) { return promoBarEligible(bar, now, dismissed, audience, phone); });
         var limit = parseInt(group.getAttribute('data-limit') || '0', 10);
         if (mode === 'first') eligible = eligible.slice(0, 1);
         else if (limit > 0) eligible = eligible.slice(0, limit);
@@ -308,7 +311,12 @@
         return number < 10 ? '0' + number : String(number);
     }
 
-    function remaining(ms) {
+    function isPhone(group) {
+        var width = parseInt(group.getAttribute('data-phone-width') || '0', 10);
+        return width > 0 && window.matchMedia && window.matchMedia('(max-width: ' + width + 'px)').matches;
+    }
+
+    function remaining(ms, short) {
         var units = (config.labels || {}).units || { d: 'd', h: 'h', m: 'm', s: 's' };
         var total = Math.max(0, Math.floor(ms / 1000));
         var days = Math.floor(total / 86400);
@@ -316,6 +324,11 @@
         var minutes = Math.floor((total % 3600) / 60);
         var seconds = total % 60;
         var parts = [];
+
+        // On phones, the two largest units: 4d 01h, or 03h 12m.
+        if (short) {
+            return days ? days + units.d + ' ' + pad(hours) + units.h : pad(hours) + units.h + ' ' + pad(minutes) + units.m;
+        }
 
         if (days) parts.push(days + units.d);
         parts.push(pad(hours) + units.h, pad(minutes) + units.m);
@@ -335,7 +348,7 @@
             all(group, '[data-promo-bar-countdown]').forEach(function (countdown) {
                 var ends = Date.parse(countdown.getAttribute('data-ends'));
                 var output = countdown.querySelector('[data-promo-bar-remaining]');
-                if (output) output.textContent = remaining(ends - now);
+                if (output) output.textContent = remaining(ends - now, isPhone(group));
             });
 
             all(group, '[data-promo-bar][data-ends]').forEach(function (bar) {
@@ -445,11 +458,11 @@
                 elements.forEach(function (element) {
                     var bar = element.closest('[data-promo-bar]');
                     var state = (data.bars || {})[bar.getAttribute('data-promo-bar-id')];
-                    var message = bar.querySelector('[data-promo-bar-message]');
+                    var messages = all(bar, '[data-promo-bar-message]');
 
                     if (!state) {
                         element.hidden = true;
-                        if (message) message.hidden = false;
+                        messages.forEach(function (message) { message.hidden = false; });
                         return;
                     }
 
@@ -461,7 +474,7 @@
                     var meter = element.querySelector('progress');
                     if (meter) meter.value = state.percent;
                     element.hidden = false;
-                    if (message) message.hidden = true;
+                    messages.forEach(function (message) { message.hidden = true; });
                 });
             })
             .catch(function () { /* Leave the message showing. */ });
@@ -513,6 +526,15 @@
     function start() {
         all(document, '[data-promo-bar-group]').forEach(setUp);
         if (!groups.length) return;
+
+        // Turning a tablet, or resizing past the phone width, changes what shows.
+        groups.forEach(function (group) {
+            var width = parseInt(group.getAttribute('data-phone-width') || '0', 10);
+            if (!width || !window.matchMedia) return;
+            var query = window.matchMedia('(max-width: ' + width + 'px)');
+            var changed = function () { refresh(group); tick(); };
+            if (query.addEventListener) query.addEventListener('change', changed); else if (query.addListener) query.addListener(changed);
+        });
 
         tick();
         if (document.querySelector('[data-promo-bar-countdown], [data-promo-bar][data-ends]')) {

@@ -10,6 +10,7 @@ Promo Bar's markup and script are built to WCAG 2.2 AA. The presets' colours pas
 - Closing a bar moves keyboard focus to the bar that takes its place, if there is one.
 - "Copied" is announced to screen readers.
 - Countdowns: the changing numbers are hidden from screen readers (they'd be read every second); the end date is read instead. Visitors who prefer reduced motion see hours and minutes, updated every half minute, not ticking seconds.
+- On phones, a bar's phone message replaces its message with CSS, so screen readers read only the one on screen. "Use code" is hidden visually but still read.
 - Rotating bars have previous, pause and next buttons, pause while the pointer or focus is on them, and never move on their own for visitors who prefer reduced motion. Bars not showing are `inert`, so they can't be tabbed to or read.
 
 ## What to check in your design

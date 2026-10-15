@@ -51,6 +51,17 @@ With **None**, bars get only the rules they need to work (hiding, rotating in pl
 | `.promo-bar__dismiss` | The close button. |
 | `.promo-bar__controls` | Rotating's previous, pause and next buttons (`.promo-bar__control`). |
 
+## Phones
+
+The phone rules are in their own media query, for the phone width in the settings. They add these classes to style against:
+
+| Class | |
+| --- | --- |
+| `.promo-bar__message--wide`, `.promo-bar__message--phone` | When a bar has a phone message: the message for bigger screens and for phones. |
+| `.promo-bar--phone-hidden` | On a bar not shown on phones. |
+| `.promo-bar--phone-no-countdown`, `-no-code`, `-no-button` | On a bar leaving those out on phones. |
+| `.promo-bar--phone-first` | On the wrapper of stacked bars showing only the first on phones. |
+
 ## Changing a preset from your CSS
 
 The presets are written as CSS custom properties, so your stylesheet can override any of them, for every bar or one preset:

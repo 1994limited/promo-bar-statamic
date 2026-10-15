@@ -5,7 +5,7 @@
 -->
 <script setup>
 import { Fieldtype } from '@statamic/cms';
-import { Description, injectPublishContext } from '@statamic/cms/ui';
+import { Button, Description, injectPublishContext } from '@statamic/cms/ui';
 import { computed, onMounted, ref, watch } from 'vue';
 import { barHtml, bardToHtml, clean, contrastWarnings, escape, validColour, COLOURS } from '../preview.js';
 
@@ -16,6 +16,7 @@ defineExpose(expose);
 
 const { values } = injectPublishContext();
 const host = ref(null);
+const phone = ref(false);
 let root = null;
 
 const meta = computed(() => props.meta ?? {});
@@ -50,6 +51,7 @@ const samples = computed(() => {
                     cta: __('Shop now'),
                     dismissible: true,
                     words: words.value,
+                    phone: phone.value,
                 }),
             };
         });
@@ -67,8 +69,16 @@ const samples = computed(() => {
         }
     }
 
-    const code = v.code_source === 'text' ? v.code : v.code_source === 'cargo' ? 'CODE' : null;
+    const onPhone = phone.value;
+    const shows = (part) => !onPhone || v[`phone_${part}`] !== false;
+
+    if (onPhone && v.phone_show === false) {
+        return [{ key: 'bar', label: null, warnings: [], hidden: true, html: '' }];
+    }
+
+    const code = !shows('code') ? null : v.code_source === 'text' ? v.code : v.code_source === 'cargo' ? 'CODE' : null;
     const progress = v.free_delivery ? String(v.free_delivery_progress || words.value.progress || '').split(':remaining').join('£12.00') : null;
+    const phoneMessage = onPhone ? bardToHtml(v.phone_message) : '';
 
     return [{
         key: 'bar',
@@ -77,14 +87,15 @@ const samples = computed(() => {
         html: barHtml({
             style,
             values: preset,
-            message: bardToHtml(v.message) || escape(__('Your message')),
-            cta: v.cta_label,
+            message: phoneMessage || bardToHtml(v.message) || escape(__('Your message')),
+            cta: shows('button') ? v.cta_label : null,
             code,
-            countdown: v.countdown ? v.countdown_label || words.value.countdown : null,
+            countdown: v.countdown && shows('countdown') ? v.countdown_label || words.value.countdown : null,
             ends: v.ends_at,
             progress,
             dismissible: v.dismissible !== false,
             words: words.value,
+            phone: onPhone,
         }),
     }];
 });
@@ -94,7 +105,9 @@ function draw() {
     root ??= host.value.attachShadow({ mode: 'open' });
 
     const items = samples.value
-        .map((sample) => `${sample.label ? `<p class="label">${escape(sample.label)}</p>` : ''}<div class="promo-bar">${sample.html}</div>`)
+        .map((sample) => sample.hidden
+            ? `<p class="hidden-note">${escape(__('Not shown on phones.'))}</p>`
+            : `${sample.label ? `<p class="label">${escape(sample.label)}</p>` : ''}<div class="promo-bar">${sample.html}</div>`)
         .join('');
 
     // The page's own font, as on the site the bar inherits it.
@@ -104,15 +117,23 @@ function draw() {
         .label:first-child { margin-top: 0; }
         .promo-bar__bar { border-radius: 0.375rem; }
         a, button { pointer-events: none; }
-    </style>${items}`;
+        .phone { width: 375px; max-width: 100%; margin: 0 auto; }
+        .phone .promo-bar__bar { border-radius: 0.375rem; }
+        .hidden-note { margin: 0; padding: 0.75rem; border: 1px dashed #9ca3af; border-radius: 0.375rem; font-size: 0.8125rem; color: #6b7280; text-align: center; }
+        .phone { ${meta.value.phone_css ?? ''} }
+    </style><div class="${phone.value ? 'phone' : ''}">${items}</div>`;
 }
 
 onMounted(draw);
-watch(samples, draw, { deep: true });
+watch([samples, phone], draw, { deep: true });
 </script>
 
 <template>
     <div>
+        <div class="mb-2 flex justify-end gap-1" role="group" :aria-label="__('Preview size')">
+            <Button size="sm" :variant="phone ? 'ghost' : 'default'" :text="__('Desktop')" :aria-pressed="!phone" @click="phone = false" />
+            <Button size="sm" :variant="phone ? 'default' : 'ghost'" :text="__('Phone')" :aria-pressed="phone" @click="phone = true" />
+        </div>
         <div ref="host" />
         <div v-for="sample in samples.filter((s) => s.warnings.length)" :key="sample.key" class="mt-2">
             <Description class="text-amber-700! dark:text-amber-400!">

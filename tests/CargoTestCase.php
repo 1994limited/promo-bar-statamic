@@ -84,7 +84,7 @@ YAML);
 
         parent::setUp();
 
-        Site::setSites(['default' => ['name' => 'Shop', 'url' => '/', 'locale' => 'en_GB', 'attributes' => ['currency' => 'GBP']]])->save();
+        Site::setSites(['default' => ['name' => 'Shop', 'url' => '/', 'locale' => 'en_GB', 'attributes' => ['currency' => 'GBP']]]);
         Blueprint::setDirectory(static::$content.'/blueprints');
     }
 

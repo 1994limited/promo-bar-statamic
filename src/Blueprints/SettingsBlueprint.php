@@ -42,6 +42,13 @@ class SettingsBlueprint
                 $this->field('sticky', ['type' => 'toggle', 'display' => __('Stick to the top on scroll'), 'default' => false, 'width' => 50]),
                 $this->field('dismiss_days', ['type' => 'integer', 'display' => __('Dismissed bars come back after (days)'), 'instructions' => __('Leave empty to keep them hidden. Each bar can choose its own.'), 'validate' => ['nullable', 'integer', 'min:1', 'max:365'], 'width' => 50]),
             ],
+        ], [
+            'display' => __('Phones'),
+            'instructions' => __('Bars are smaller on phones, and each bar can choose a shorter message and what to leave out.'),
+            'fields' => [
+                $this->field('phone_width', ['type' => 'integer', 'display' => __('Phones are screens up to (px)'), 'default' => $defaults['phone_width'], 'validate' => ['nullable', 'integer', 'min:320', 'max:1200'], 'width' => 50]),
+                $this->field('phone_first_only', ['type' => 'toggle', 'display' => __('Stacked bars: only the first on phones'), 'instructions' => __('So stacked bars don’t fill a small screen. Rotating bars already show one at a time.'), 'default' => true, 'width' => 50]),
+            ],
         ]];
     }
 

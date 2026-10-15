@@ -8,7 +8,7 @@ Promo Bar has two places for settings: the **settings page** in the Control Pane
 
 | Tab | |
 | --- | --- |
-| General | What shows when several bars are live (first, stacked or rotating) and the seconds each when rotating; the default style; sticking to the top on scroll; and how many days before a dismissed bar comes back (each bar can choose its own). |
+| General | What shows when several bars are live (first, stacked or rotating) and the seconds each when rotating; the default style; sticking to the top on scroll; how many days before a dismissed bar comes back (each bar can choose its own); and, under Phones, the widest screen counted as a phone (640px) and whether stacked bars show only the first on phones. |
 | Styles | The six presets. See [Styles](styles.md). |
 | Wording | The words bars use: the region's name for screen readers, Dismiss, the countdown and end date, "Use code", Copy and Copied, the rotating buttons, and the free delivery lines. Leave any empty for the default. |
 | Analytics | See [Analytics](analytics.md). |

@@ -203,6 +203,7 @@ class Styles
     public function css(iterable $bars = []): string
     {
         $css = static::baseCss();
+        $css .= "\n@media (max-width: {$this->settings->phoneWidth()}px) {\n".static::phoneCss()."}\n";
 
         foreach (array_keys(static::presets()) as $handle) {
             $css .= "\n:where(.promo-bar--{$handle}){".static::properties($this->preset($handle)).'}';
@@ -235,6 +236,15 @@ class Styles
         }
 
         return $colours;
+    }
+
+    /**
+     * The rules for phones, without their media query: the Control Panel's
+     * preview applies them to its phone view instead.
+     */
+    public static function phoneCss(): string
+    {
+        return (string) file_get_contents(__DIR__.'/../resources/frontend/promo-bar-phone.css');
     }
 
     public static function baseCss(): string

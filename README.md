@@ -12,6 +12,7 @@ Bars are drawn on the server, so the page doesn't jump, they work without JavaSc
 - **Scheduled.** A start and an end, to the minute. Ended and upcoming bars are never in the page, so a Black Friday code can't leak early.
 - **Targeted.** Everywhere, only on some pages, or everywhere except some: by entry, by collection, or by URL pattern (`/shop/*`). On multisite, by site. And for everyone, guests only, or signed-in visitors (optionally in certain user groups).
 - **Countdowns and codes.** A live countdown to the end, and a discount code with a Copy button. Without JavaScript the end date and the code still show.
+- **Made for phones.** Bars are smaller on phones, and each can have a shorter phone message and leave out its countdown, code or button there. Stacked bars show only the first. All in CSS, so nothing jumps.
 - **Dismissible.** Visitors can close a bar. It stays closed in their browser, comes back after a number of days if you like, and reappears when you change what it says.
 - **Styled in the Control Panel.** Six presets (Solid, Subtle, Dark, Outline, Gradient, Minimal), each with its colours, button, size and alignment editable in the settings, a live preview, and a warning when text is hard to read. Give one bar its own colours, or choose None and bring your own CSS.
 - **Your analytics.** Clicks, dismissals, code copies and (if you like) views go to Google Tag Manager, GA4, Plausible, Fathom, Umami, Matomo, or a function of your own, through the trackers already on your pages. No cookies, nothing sent from your server.

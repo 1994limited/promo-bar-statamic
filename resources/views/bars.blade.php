@@ -3,7 +3,7 @@
     --tag=promo-bar-views), keeping the data-promo-bar-* attributes: the
     script reads them.
 --}}
-<section id="{{ $id }}" class="promo-bar promo-bar--{{ $mode }}{{ $class ? ' '.$class : '' }}" aria-label="{{ $label }}" data-promo-bar-group data-mode="{{ $mode }}" data-interval="{{ $interval }}"{!! $limit ? ' data-limit="'.(int) $limit.'"' : '' !!} data-audience-cookie="{{ $cookie }}"{!! $sticky ? ' data-sticky' : '' !!}>
+<section id="{{ $id }}" class="promo-bar promo-bar--{{ $mode }}{{ $phone_first ? ' promo-bar--phone-first' : '' }}{{ $class ? ' '.$class : '' }}" aria-label="{{ $label }}" data-promo-bar-group data-mode="{{ $mode }}" data-interval="{{ $interval }}" data-phone-width="{{ $phone_width }}"{!! $limit ? ' data-limit="'.(int) $limit.'"' : '' !!} data-audience-cookie="{{ $cookie }}"{!! $sticky ? ' data-sticky' : '' !!}>
 @foreach ($bars as $index => $bar)
 @php
     $inactive = $mode === 'rotate' && $index > 0;
@@ -20,7 +20,12 @@
         </div>
 @endif
         <div class="promo-bar__inner">
+@if ($bar['phone_message'])
+            <div class="promo-bar__message promo-bar__message--wide" data-promo-bar-message{!! $state ? ' hidden' : '' !!}>{!! $bar['message'] !!}</div>
+            <div class="promo-bar__message promo-bar__message--phone" data-promo-bar-message{!! $state ? ' hidden' : '' !!}>{!! $bar['phone_message'] !!}</div>
+@else
             <div class="promo-bar__message" data-promo-bar-message{!! $state ? ' hidden' : '' !!}>{!! $bar['message'] !!}</div>
+@endif
 @if ($bar['countdown'])
             <p class="promo-bar__countdown" data-promo-bar-countdown data-ends="{{ $bar['countdown']['ends_iso'] }}">
                 <span data-promo-bar-js="countdown" aria-hidden="true" hidden>{{ $bar['countdown']['label'] }} <span data-promo-bar-remaining></span></span>

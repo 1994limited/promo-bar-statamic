@@ -78,6 +78,8 @@ class Renderer
             'interval' => max(2, (int) $this->settings->get('rotate_interval')),
             'limit' => $limit,
             'sticky' => (bool) ($options['sticky'] ?? $this->settings->bool('sticky')),
+            'phone_width' => $this->settings->phoneWidth(),
+            'phone_first' => $mode === 'stack' && $this->settings->bool('phone_first_only'),
             'class' => $options['class'] ?? null,
             'label' => $options['label'] ?? $this->settings->text('region_label'),
             'labels' => $this->labels(),
