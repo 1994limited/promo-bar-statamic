@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 (unreleased)
+## 1.0.0 (2026-10-15)
 
 ### Added
 - **Promo bars**, made under Content → Promo Bars: a message, a button, a countdown, a discount code, and a close button that's remembered. Drag them into order.
