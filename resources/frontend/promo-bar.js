@@ -118,7 +118,11 @@
     function refocus(group, gone, shown) {
         var visible = shown.filter(function (bar) { return !bar.classList.contains('is-inactive'); });
         var after = visible.filter(function (bar) { return gone.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING; });
-        var target = firstFocusable(after[0] || visible[visible.length - 1]);
+        var before = visible.filter(function (bar) { return after.indexOf(bar) < 0; }).reverse();
+        var target = null;
+
+        // The first bar with something to focus: after it, then before it.
+        after.concat(before).some(function (bar) { return (target = firstFocusable(bar)); });
 
         if (!target) {
             target = all(document, 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])').filter(function (element) {
