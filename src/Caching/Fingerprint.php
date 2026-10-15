@@ -32,15 +32,17 @@ class Fingerprint
         $live = $this->bars->liveIds($now);
         $previous = Cache::get(self::KEY);
 
-        Cache::forever(self::KEY, $live);
-
         if (! is_array($previous)) {
+            // Without flushing, leave it unrecorded: the next tick flushes.
             if ($flushWhenUnknown) {
                 $this->invalidator->flush();
+                Cache::forever(self::KEY, $live);
             }
 
             return [];
         }
+
+        Cache::forever(self::KEY, $live);
 
         $changed = array_values(array_unique([...array_diff($live, $previous), ...array_diff($previous, $live)]));
         $pending = array_values(array_diff($changed, $handled));

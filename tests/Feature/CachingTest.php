@@ -132,11 +132,24 @@ class CachingTest extends TestCase
         StaticCache::shouldHaveReceived('flush')->once();
     }
 
+    public function test_a_save_with_no_record_leaves_the_first_flush_to_the_tick(): void
+    {
+        Cache::forget(Fingerprint::KEY);
+        $this->bar(['pages' => 'only', 'urls' => '/other']);
+        StaticCache::shouldNotHaveReceived('flush');
+
+        $this->assertNull(Cache::get(Fingerprint::KEY));
+
+        $this->artisan('promo-bar:tick')->assertSuccessful();
+        StaticCache::shouldHaveReceived('flush')->once();
+    }
+
     public function test_saving_another_bar_doesnt_swallow_a_start_the_tick_hasnt_seen(): void
     {
         $this->travelTo(CarbonImmutable::parse('2026-10-15 09:59', 'Europe/London'));
         $this->bar(['title' => 'Starts', 'pages' => 'only', 'urls' => '/starts', 'starts_at' => '2026-10-15 10:00']);
         $other = $this->bar(['title' => 'Other', 'pages' => 'only', 'urls' => '/other']);
+        $this->artisan('promo-bar:tick')->assertSuccessful();
 
         $this->travelTo(CarbonImmutable::parse('2026-10-15 10:00:20', 'Europe/London'));
         $this->bars()->save($other->set('title', 'Other, renamed'));

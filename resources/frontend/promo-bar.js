@@ -113,6 +113,22 @@
         return bar ? all(bar, 'a[href], button').filter(function (element) { return !element.closest('[hidden]'); })[0] : null;
     }
 
+    // After a bar the keyboard was in goes away: the nearest bar still
+    // showing (after it, else before), or the first thing after the bars.
+    function refocus(group, gone, shown) {
+        var visible = shown.filter(function (bar) { return !bar.classList.contains('is-inactive'); });
+        var after = visible.filter(function (bar) { return gone.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING; });
+        var target = firstFocusable(after[0] || visible[visible.length - 1]);
+
+        if (!target) {
+            target = all(document, 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])').filter(function (element) {
+                return !group.contains(element) && (group.compareDocumentPosition(element) & Node.DOCUMENT_POSITION_FOLLOWING) && !element.closest('[hidden], [inert]') && !element.disabled;
+            })[0];
+        }
+
+        if (target) target.focus();
+    }
+
     function emit(name, bar, extra) {
         var detail = Object.assign(describe(bar), extra || {});
         document.dispatchEvent(new CustomEvent('promo-bar:' + name, { detail: detail }));
@@ -241,11 +257,9 @@
         try { window.localStorage.setItem(promoBarDismissedKey, JSON.stringify(stored)); } catch (e) { /* private mode */ }
 
         emit('dismiss', bar);
-        var shown = refresh(group);
 
-        // Keep the keyboard's place: on the next bar if one took its spot.
-        var next = firstFocusable(shown.filter(function (bar) { return !bar.classList.contains('is-inactive'); })[0]);
-        if (next) next.focus();
+        // Keep the keyboard's place: on the bar that took its spot, or after the bars.
+        refocus(group, bar, refresh(group));
     }
 
     // Where the clipboard API is refused, select the code and copy that.
@@ -327,13 +341,10 @@
             if (ended) {
                 // Keep the keyboard's place if it was in the bar that ended.
                 var focused = group.contains(document.activeElement) ? document.activeElement : null;
+                var focusedBar = focused && focused.closest('[data-promo-bar]');
                 var shown = refresh(group);
-                var active = shown.filter(function (bar) { return !bar.classList.contains('is-inactive'); })[0];
 
-                if (focused && (focused.closest('[data-promo-bar]').hidden || focused.closest('[inert]'))) {
-                    var next = firstFocusable(active);
-                    if (next) next.focus();
-                }
+                if (focusedBar && (focusedBar.hidden || focusedBar.hasAttribute('inert'))) refocus(group, focusedBar, shown);
             }
         });
     }

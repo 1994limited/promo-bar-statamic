@@ -41,6 +41,24 @@ class MultisiteTest extends TestCase
         $this->assertStringContainsString('About bar', $this->antlers('{{ promo_bar }}', ['id' => 'a-propos']));
     }
 
+    public function test_listing_a_translation_lists_the_original_too(): void
+    {
+        $this->bar(['pages' => 'only', 'entries' => ['a-propos']], 'About bar');
+
+        $this->assertStringContainsString('About bar', $this->antlers('{{ promo_bar }}', ['id' => 'about']));
+    }
+
+    public function test_a_bar_for_one_site_clears_only_that_sites_pages(): void
+    {
+        $this->staticCaching();
+        $cacher = Mockery::spy(Cacher::class);
+        $this->app->instance(Cacher::class, $cacher);
+
+        $this->bar(['sites' => ['fr'], 'pages' => 'only', 'entries' => ['about']]);
+
+        $cacher->shouldHaveReceived('invalidateUrls')->with(['http://localhost/fr/a-propos'])->once();
+    }
+
     public function test_a_bar_for_one_site(): void
     {
         $this->bar(['sites' => ['fr']], 'Bonjour');

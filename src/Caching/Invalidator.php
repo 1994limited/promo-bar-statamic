@@ -109,6 +109,10 @@ class Invalidator
             $translations = $root ? Entry::query()->where('collection', $root->collectionHandle())->where('origin', $root->id())->get()->all() : [];
 
             foreach ($root ? [$root, ...$translations] : [] as $localization) {
+                if ($bar->sites() !== [] && ! in_array($localization->locale(), $bar->sites(), true)) {
+                    continue;
+                }
+
                 if ($url = $localization->absoluteUrl()) {
                     $urls[] = $url;
                 }

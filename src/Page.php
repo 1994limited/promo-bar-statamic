@@ -23,6 +23,15 @@ class Page
     ) {}
 
     /**
+     * The entry's original (in its first site): itself, unless it's a
+     * translation.
+     */
+    public function root(): ?string
+    {
+        return $this->origin ?? $this->entry;
+    }
+
+    /**
      * The page being rendered: the entry from the template's context if
      * there is one, otherwise the entry at the request's URL.
      */

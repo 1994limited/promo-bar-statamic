@@ -2,6 +2,10 @@
 
 namespace NineteenNinetyFour\PromoBar;
 
+use Statamic\Facades\Blink;
+use Statamic\Facades\Entry;
+use Throwable;
+
 /**
  * Which pages a bar shows on: everywhere, only on some, or everywhere
  * except some. "Some" is any of the entries, collections and URL patterns
@@ -27,13 +31,9 @@ class Targeting
      */
     public function listed(Bar $bar, Page $page): bool
     {
-        $entries = static::entries($bar);
-
-        if ($page->entry && in_array($page->entry, $entries, true)) {
-            return true;
-        }
-
-        if ($page->origin && in_array($page->origin, $entries, true)) {
+        // Entries are compared by their original, so listing any translation
+        // of an entry lists all of them.
+        if ($page->root() && in_array($page->root(), static::entryRoots($bar), true)) {
             return true;
         }
 
@@ -56,6 +56,24 @@ class Targeting
     public static function entries(Bar $bar): array
     {
         return array_values(array_filter((array) $bar->get('entries', []), 'is_string'));
+    }
+
+    /**
+     * The bar's entries as their originals' IDs.
+     *
+     * @return array<int, string>
+     */
+    public static function entryRoots(Bar $bar): array
+    {
+        return array_values(array_unique(array_map(fn (string $id) => Blink::once('promo-bar-root-'.$id, function () use ($id) {
+            try {
+                $entry = Entry::find($id);
+            } catch (Throwable) {
+                $entry = null;
+            }
+
+            return $entry && method_exists($entry, 'root') ? ($entry->root()?->id() ?? $id) : $id;
+        }), static::entries($bar))));
     }
 
     /**
