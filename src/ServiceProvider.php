@@ -111,7 +111,7 @@ class ServiceProvider extends AddonServiceProvider
     public function bootAddon(): void
     {
         // Read by the script, so not encrypted. It isn't a secret.
-        EncryptCookies::except(config('promo-bar.audience_cookie.name', 'promo_bar_audience'));
+        EncryptCookies::except(app(AudienceCookie::class)->name());
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'promo-bar');
 
@@ -182,12 +182,15 @@ class ServiceProvider extends AddonServiceProvider
     {
         Event::listen(BarSaved::class, function (BarSaved $event) {
             app(Invalidator::class)->bars([$event->bar, $event->original]);
-            app(Fingerprint::class)->remember();
+
+            // And any bar that started or ended since the last tick, which
+            // this would otherwise mark as done.
+            app(Fingerprint::class)->check(flushWhenUnknown: false, handled: [$event->bar->id()]);
         });
 
         Event::listen(BarDeleted::class, function (BarDeleted $event) {
             app(Invalidator::class)->bars([$event->bar]);
-            app(Fingerprint::class)->remember();
+            app(Fingerprint::class)->check(flushWhenUnknown: false, handled: [$event->bar->id()]);
         });
 
         // Order and settings change what's shown everywhere.

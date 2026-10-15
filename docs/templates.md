@@ -55,7 +55,7 @@ Rotating pauses while the pointer or keyboard focus is on the bar, and doesn't m
 | Parameter | |
 | --- | --- |
 | `mode` | `first`, `stack` or `rotate`. Default: the settings' choice. |
-| `limit` | At most this many bars. |
+| `limit` | At most this many bars, counted after those the visitor can't see (dismissed, or not for them) are left out. |
 | `sticky` | `true` to keep the bars at the top of the window on scroll (`position: sticky`). Default: the settings' choice. |
 | `class` | Classes added to the bars' wrapper. |
 | `label` | The name screen readers announce for the bars' region. Default: "Announcements", or the settings' wording. |

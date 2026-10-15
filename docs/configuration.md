@@ -33,7 +33,7 @@ php artisan vendor:publish --tag=promo-bar-config
 | `drivers.database.table` | `promo_bars` | Its table. |
 | `static_caching.invalidate` | `true` | Clear cached pages when bars change, start or end. See [Static caching](caching.md). |
 | `static_caching.schedule` | `true` | Run `promo-bar:tick` every minute on Laravel's scheduler. |
-| `audience_cookie.name` | `promo_bar_audience` | The signed-in cookie's name. |
+| `audience_cookie.name` | `promo_bar_audience` | The signed-in cookie's name: letters, numbers, `_` and `-` only. |
 | `audience_cookie.minutes` | 30 days | How long it lasts (it's removed on sign-out). |
 
 ## Storage

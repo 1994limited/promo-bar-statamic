@@ -101,14 +101,16 @@ class Invalidator
                 $entry = null;
             }
 
-            if ($entry && ($url = $entry->absoluteUrl())) {
-                $urls[] = $url;
+            // The entry and every translation of it, as the bar shows on all.
+            $root = $entry && method_exists($entry, 'root') ? ($entry->root() ?? $entry) : $entry;
 
-                // And the same entry in the other sites it's in.
-                foreach ($entry->descendants() as $localization) {
-                    if ($url = $localization->absoluteUrl()) {
-                        $urls[] = $url;
-                    }
+            // Queried directly: Entry::descendants() is remembered for the
+            // request, so can miss a translation made in the same one.
+            $translations = $root ? Entry::query()->where('collection', $root->collectionHandle())->where('origin', $root->id())->get()->all() : [];
+
+            foreach ($root ? [$root, ...$translations] : [] as $localization) {
+                if ($url = $localization->absoluteUrl()) {
+                    $urls[] = $url;
                 }
             }
         }

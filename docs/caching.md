@@ -24,7 +24,8 @@ The main script (deferred) then runs countdowns, Copy buttons and rotating, and 
 | A bar is saved or deleted | The pages it showed on and the pages it shows on now: only those pages when it lists entries or URLs; every page when it shows everywhere, everywhere except some, or in whole collections. |
 | Bars are reordered | Every page. |
 | The settings are saved | Every page. |
-| A bar starts or ends (checked every minute by `promo-bar:tick`) | That bar's pages, as above. Includes a bar ending because its Cargo discount ended. |
+| A bar starts or ends (checked every minute by `promo-bar:tick`, and whenever a bar is saved) | That bar's pages, as above. Includes a bar ending because its Cargo discount ended. |
+| The first tick after installing, or after Laravel's cache is cleared | Every page, once: until then, there's no record of which bars cached pages hold. |
 
 `promo-bar:tick` runs on Laravel's scheduler: make sure it's running (see [Installation](installation.md#the-scheduler)). You can run it yourself to check:
 

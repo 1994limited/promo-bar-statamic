@@ -57,7 +57,9 @@
         var mode = group.getAttribute('data-mode');
         var bars = [].slice.call(group.querySelectorAll('[data-promo-bar]'));
         var eligible = bars.filter(function (bar) { return promoBarEligible(bar, now, dismissed, audience); });
+        var limit = parseInt(group.getAttribute('data-limit') || '0', 10);
         if (mode === 'first') eligible = eligible.slice(0, 1);
+        else if (limit > 0) eligible = eligible.slice(0, limit);
         var active = group.querySelector('[data-promo-bar]:not(.is-inactive):not([hidden])');
         if (mode === 'rotate' && eligible.indexOf(active) < 0) active = eligible[0];
 
@@ -104,6 +106,11 @@
 
     function all(root, selector) {
         return Array.prototype.slice.call(root.querySelectorAll(selector));
+    }
+
+    // The first link or button a keyboard can reach in a bar.
+    function firstFocusable(bar) {
+        return bar ? all(bar, 'a[href], button').filter(function (element) { return !element.closest('[hidden]'); })[0] : null;
     }
 
     function emit(name, bar, extra) {
@@ -237,7 +244,7 @@
         var shown = refresh(group);
 
         // Keep the keyboard's place: on the next bar if one took its spot.
-        var next = shown[0] && shown[0].querySelector('a, button:not([hidden])');
+        var next = firstFocusable(shown.filter(function (bar) { return !bar.classList.contains('is-inactive'); })[0]);
         if (next) next.focus();
     }
 
@@ -317,7 +324,17 @@
                 if (!bar.hidden && Date.parse(bar.getAttribute('data-ends')) <= now) ended = true;
             });
 
-            if (ended) refresh(group);
+            if (ended) {
+                // Keep the keyboard's place if it was in the bar that ended.
+                var focused = group.contains(document.activeElement) ? document.activeElement : null;
+                var shown = refresh(group);
+                var active = shown.filter(function (bar) { return !bar.classList.contains('is-inactive'); })[0];
+
+                if (focused && (focused.closest('[data-promo-bar]').hidden || focused.closest('[inert]'))) {
+                    var next = firstFocusable(active);
+                    if (next) next.focus();
+                }
+            }
         });
     }
 

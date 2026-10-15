@@ -14,9 +14,15 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AudienceCookie
 {
+    /**
+     * The cookie's name: letters, numbers, _ and - only, as the script reads
+     * it. Anything else falls back to the default.
+     */
     public function name(): string
     {
-        return (string) config('promo-bar.audience_cookie.name', 'promo_bar_audience');
+        $name = config('promo-bar.audience_cookie.name');
+
+        return is_string($name) && preg_match('/^[A-Za-z0-9_-]{1,64}$/', $name) ? $name : 'promo_bar_audience';
     }
 
     public function queue(Visitor $visitor): void

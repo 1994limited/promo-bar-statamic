@@ -60,6 +60,23 @@ class TagsTest extends TestCase
         $this->assertStringContainsString('href="/shop?a=1&amp;b=2"', $html);
     }
 
+    public function test_the_message_is_sanitised_whatever_was_stored(): void
+    {
+        $this->bar(['message' => [
+            ['type' => 'text', 'marks' => [['type' => 'link', 'attrs' => ['href' => 'javascript:alert(1)']]], 'text' => 'bad link'],
+            ['type' => 'text', 'marks' => [['type' => 'link', 'attrs' => ['href' => '/shop', 'target' => '_blank']]], 'text' => 'good link'],
+            ['type' => 'html', 'attrs' => ['html' => '<img src=x onerror=alert(1)>']],
+            ['type' => 'text', 'marks' => [['type' => 'bold']], 'text' => 'bold'],
+        ]]);
+
+        $html = $this->antlers('{{ promo_bar }}');
+
+        $this->assertStringNotContainsString('javascript:', $html);
+        $this->assertStringNotContainsString('onerror', $html);
+        $this->assertStringContainsString('<a href="/shop" target="_blank" rel="noopener">good link</a>', $html);
+        $this->assertStringContainsString('<strong>bold</strong>', $html);
+    }
+
     public function test_the_button(): void
     {
         $this->bar(['cta_label' => 'Shop now', 'cta_url' => 'https://example.com/sale', 'cta_new_tab' => true]);
@@ -106,7 +123,7 @@ class TagsTest extends TestCase
 
         $this->assertStringContainsString('data-ends="2026-10-18T23:59:00+01:00"', $html);
         $this->assertStringContainsString('<span data-promo-bar-fallback>Ends <time datetime="2026-10-18T23:59:00+01:00">Sun 18 Oct, 23:59</time></span>', $html);
-        $this->assertStringContainsString('<span data-promo-bar-js="countdown" hidden>Ends in <span data-promo-bar-remaining aria-hidden="true"></span></span>', $html);
+        $this->assertStringContainsString('<span data-promo-bar-js="countdown" aria-hidden="true" hidden>Ends in <span data-promo-bar-remaining></span></span>', $html);
     }
 
     public function test_dismissing(): void
@@ -200,6 +217,19 @@ class TagsTest extends TestCase
         $this->assertStringContainsString('class="promo-bar promo-bar--stack site-promos" aria-label="Offers"', $html);
         $this->assertStringContainsString(' data-sticky>', $html);
         $this->assertStringNotContainsString('data-promo-bar-name="Two"', $html);
+    }
+
+    public function test_on_cached_pages_the_limit_is_left_to_the_browser(): void
+    {
+        $this->staticCaching();
+        $this->bar(['title' => 'Members', 'audience' => 'signed_in']);
+        $this->bar(['title' => 'Everyone']);
+
+        $html = $this->antlers('{{ promo_bar mode="stack" limit="1" }}');
+
+        // A guest's browser drops the members' bar and shows the next one.
+        $this->assertStringContainsString('data-promo-bar-name="Everyone"', $html);
+        $this->assertStringContainsString('data-limit="1"', $html);
     }
 
     public function test_assets_in_the_head_are_printed_once(): void

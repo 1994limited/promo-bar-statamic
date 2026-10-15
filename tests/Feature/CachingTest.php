@@ -120,15 +120,29 @@ class CachingTest extends TestCase
         $this->cacher->shouldHaveReceived('invalidateUrls')->times(3);
     }
 
-    public function test_the_first_tick_only_remembers(): void
+    public function test_the_first_tick_clears_everything_once(): void
     {
-        $this->bar();
+        $this->bar(['pages' => 'only', 'urls' => '/sale']);
         Cache::forget(Fingerprint::KEY);
-        StaticCache::shouldReceive('flush')->andReturnUsing(function () {
-            throw new \RuntimeException('flushed');
-        });
 
         $this->artisan('promo-bar:tick')->assertSuccessful();
+        StaticCache::shouldHaveReceived('flush')->once();
+
+        $this->artisan('promo-bar:tick')->assertSuccessful();
+        StaticCache::shouldHaveReceived('flush')->once();
+    }
+
+    public function test_saving_another_bar_doesnt_swallow_a_start_the_tick_hasnt_seen(): void
+    {
+        $this->travelTo(CarbonImmutable::parse('2026-10-15 09:59', 'Europe/London'));
+        $this->bar(['title' => 'Starts', 'pages' => 'only', 'urls' => '/starts', 'starts_at' => '2026-10-15 10:00']);
+        $other = $this->bar(['title' => 'Other', 'pages' => 'only', 'urls' => '/other']);
+
+        $this->travelTo(CarbonImmutable::parse('2026-10-15 10:00:20', 'Europe/London'));
+        $this->bars()->save($other->set('title', 'Other, renamed'));
+
+        // Saved before the tick ran: the bar that started has its pages cleared too.
+        $this->cacher->shouldHaveReceived('invalidateUrls')->with(['http://localhost/starts'])->twice();
     }
 
     public function test_the_tick_is_scheduled(): void

@@ -17,12 +17,17 @@ class Fingerprint
     public function __construct(protected PromoBars $bars, protected Invalidator $invalidator) {}
 
     /**
-     * Compare with the last run and clear the pages of bars that started
+     * Compare with the last check and clear the pages of bars that started
      * or ended since.
      *
+     * With nothing to compare with (the first run, or after Laravel's cache
+     * was cleared), cached pages may hold any bars, so they're all cleared
+     * unless $flushWhenUnknown is false.
+     *
+     * @param  array<int, string>  $handled  Bars whose pages were just cleared some other way.
      * @return array<int, string> The IDs of the bars that changed.
      */
-    public function check(?CarbonImmutable $now = null): array
+    public function check(?CarbonImmutable $now = null, bool $flushWhenUnknown = true, array $handled = []): array
     {
         $live = $this->bars->liveIds($now);
         $previous = Cache::get(self::KEY);
@@ -30,13 +35,18 @@ class Fingerprint
         Cache::forever(self::KEY, $live);
 
         if (! is_array($previous)) {
+            if ($flushWhenUnknown) {
+                $this->invalidator->flush();
+            }
+
             return [];
         }
 
         $changed = array_values(array_unique([...array_diff($live, $previous), ...array_diff($previous, $live)]));
+        $pending = array_values(array_diff($changed, $handled));
 
-        if ($changed !== []) {
-            $this->invalidator->bars(array_map(fn ($id) => $this->bars->find($id), $changed));
+        if ($pending !== []) {
+            $this->invalidator->bars(array_map(fn ($id) => $this->bars->find($id), $pending));
         }
 
         return $changed;

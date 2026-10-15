@@ -1,6 +1,8 @@
 # Analytics
 
-Promo Bar can send what visitors do with bars to the analytics already on your site. It calls their scripts in the browser, so your consent banner still decides what's tracked. Nothing is sent from your server, and Promo Bar sets no tracking cookies of its own.
+Promo Bar can send what visitors do with bars to the analytics already on your site. It calls their scripts in the browser, so when your consent banner holds those scripts back, nothing is tracked through them. Nothing is sent from your server, and Promo Bar sets no tracking cookies of its own.
+
+The one exception is a custom **Also send to a URL**: Promo Bar sends to it directly, consent or not. Use it only for a URL your consent setup allows (or one that collects nothing personal), and remember the events include the page's path.
 
 Set it up under **Tools → Addons → Promo Bar → Settings → Analytics**.
 
@@ -43,7 +45,7 @@ For any other tracker, or your own:
   - `(event, bar name, button URL)`;
   - `(['trackEvent', 'Promo Bar', event, bar name])`, the shape Matomo's `_paq.push` takes.
 - **Rename properties**: send `id` as `campaign_id`, and so on (for the first shape).
-- **Also send to a URL**: each event is POSTed there as JSON (`{ "event": "promo_bar_click", "id": "…", … }`) with the browser's `sendBeacon`. A path on your own site, or a full `https://` URL.
+- **Also send to a URL**: each event is POSTed there as JSON (`{ "event": "promo_bar_click", "id": "…", … }`) with the browser's `sendBeacon`. A path on your own site, or a full `https://` URL. This is sent whatever your consent banner says (see above).
 
 The function is looked up when each event happens, so it can be defined after Promo Bar's script loads.
 

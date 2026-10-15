@@ -27,7 +27,13 @@ class Targeting
      */
     public function listed(Bar $bar, Page $page): bool
     {
-        if ($page->entry && in_array($page->entry, static::entries($bar), true)) {
+        $entries = static::entries($bar);
+
+        if ($page->entry && in_array($page->entry, $entries, true)) {
+            return true;
+        }
+
+        if ($page->origin && in_array($page->origin, $entries, true)) {
             return true;
         }
 

@@ -14,7 +14,7 @@ The form has a live preview at the top, in the bar's style.
 
 - **Name**: for you. It's shown in the Control Panel and sent to your analytics; visitors don't see it.
 - **On**: off hides the bar everywhere, whatever its dates.
-- **Message**: a line or two, with bold, italic and links. With free delivery on (Cargo), `:threshold` is replaced with the amount.
+- **Message**: a line or two, with bold, italic and links (web, `mailto:` and `tel:` links only). With free delivery on (Cargo), `:threshold` is replaced with the amount.
 - **Button**: a label and a link (a URL or an entry), and whether it opens in a new tab. Leave the label empty for no button. Only web, `mailto:` and `tel:` links are used.
 - **Count down to the end**: a live countdown to the end date (set under Schedule). Without JavaScript, the end date shows instead. The countdown's label can be changed for this bar.
 - **Discount code**: none, a code you type, or (with Cargo) a Cargo discount's code. It shows with a Copy button.
@@ -29,7 +29,7 @@ The form has a live preview at the top, in the bar's style.
 
 - **Sites** (multisite only): leave empty for every site.
 - **Pages**: everywhere, only on some pages, or everywhere except some. "Some" is any of:
-  - **Entries**: those entries' pages.
+  - **Entries**: those entries' pages, and their translations in other sites.
   - **Collections**: every entry in them.
   - **URLs**: one per line, as in the address bar, with `*` for "anything". `/shop/*` is every page under `/shop/`; `/shop*` also matches `/shop` and `/shopping`; `*/sale` is any page ending `/sale`. Case and a trailing slash don't matter; query strings are ignored.
 - **Show to**: everyone, guests only, or signed-in visitors. Signed-in can be narrowed to user groups.

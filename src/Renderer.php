@@ -46,8 +46,12 @@ class Renderer
             $bars = $bars->filter(fn (Bar $bar) => $visitor->sees($bar))->values();
         }
 
-        if (is_numeric($options['limit'] ?? null) && (int) $options['limit'] > 0) {
-            $bars = $bars->take((int) $options['limit'])->values();
+        $limit = is_numeric($options['limit'] ?? null) && (int) $options['limit'] > 0 ? (int) $options['limit'] : null;
+
+        // On cached pages the limit is applied in the browser, after the
+        // bars this visitor can't see are left out.
+        if ($limit && $visitor) {
+            $bars = $bars->take($limit)->values();
         }
 
         if ($bars->isEmpty()) {
@@ -72,11 +76,12 @@ class Renderer
             'bars' => $presented,
             'mode' => $mode,
             'interval' => max(2, (int) $this->settings->get('rotate_interval')),
+            'limit' => $limit,
             'sticky' => (bool) ($options['sticky'] ?? $this->settings->bool('sticky')),
             'class' => $options['class'] ?? null,
             'label' => $options['label'] ?? $this->settings->text('region_label'),
             'labels' => $this->labels(),
-            'cookie' => config('promo-bar.audience_cookie.name', 'promo_bar_audience'),
+            'cookie' => app(AudienceCookie::class)->name(),
             'cached' => $cached,
             'plausible' => $this->analytics->plausibleClasses(),
         ])->render().$this->bootstrap($nonce);
@@ -100,7 +105,7 @@ class Renderer
 
         $config = json_encode([
             'endpoint' => url('!/promo-bar'),
-            'cookie' => config('promo-bar.audience_cookie.name', 'promo_bar_audience'),
+            'cookie' => app(AudienceCookie::class)->name(),
             'site' => Site::current()->handle(),
             'labels' => $this->labels(),
             'analytics' => $this->analytics->config(),

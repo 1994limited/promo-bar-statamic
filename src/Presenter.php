@@ -85,12 +85,43 @@ class Presenter
         }
 
         try {
-            return trim((string) $this->field('message', $value));
+            return static::sanitize(trim((string) $this->field('message', $value)));
         } catch (Throwable $e) {
             report($e);
 
             return '';
         }
+    }
+
+    /**
+     * Only what the message's toolbar makes: bold, italic, line breaks and
+     * links to web, mail and phone addresses. Anything else that found its
+     * way into the stored value (an imported file, a crafted request) is
+     * dropped, as the message is printed on every page.
+     */
+    public static function sanitize(string $html): string
+    {
+        $html = strip_tags($html, ['strong', 'b', 'em', 'i', 'a', 'br']);
+
+        return (string) preg_replace_callback('/<(\/?)(strong|b|em|i|a|br)\b([^>]*)>/i', function (array $match) {
+            [, $closing, $tag, $attributes] = $match;
+            $tag = strtolower($tag);
+
+            if ($closing || $tag !== 'a') {
+                return '<'.$closing.$tag.'>';
+            }
+
+            preg_match('/\shref\s*=\s*(["\'])(.*?)\1/is', $attributes, $href);
+            $href = trim(html_entity_decode($href[2] ?? '', ENT_QUOTES | ENT_HTML5));
+
+            if (! preg_match('#^(https?://|/(?!/)|\#|\?|mailto:|tel:)#i', $href)) {
+                return '<a>';
+            }
+
+            $newTab = preg_match('/\starget\s*=\s*(["\'])_blank\1/i', $attributes) === 1;
+
+            return '<a href="'.e($href).'"'.($newTab ? ' target="_blank" rel="noopener"' : '').'>';
+        }, $html);
     }
 
     public function cta(Bar $bar): ?array

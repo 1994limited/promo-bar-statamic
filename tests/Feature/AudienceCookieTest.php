@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
+use NineteenNinetyFour\PromoBar\AudienceCookie;
 use NineteenNinetyFour\PromoBar\Tests\TestCase;
 
 class AudienceCookieTest extends TestCase
@@ -33,6 +34,13 @@ class AudienceCookieTest extends TestCase
         event(new Login('web', $this->user(), false));
 
         $this->assertNull($this->queued());
+    }
+
+    public function test_a_name_the_script_cant_read_falls_back_to_the_default(): void
+    {
+        config(['promo-bar.audience_cookie.name' => 'promo.bar audience']);
+
+        $this->assertSame('promo_bar_audience', app(AudienceCookie::class)->name());
     }
 
     public function test_signing_out_removes_it(): void

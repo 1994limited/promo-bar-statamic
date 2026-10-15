@@ -3,7 +3,7 @@
     --tag=promo-bar-views), keeping the data-promo-bar-* attributes: the
     script reads them.
 --}}
-<section id="{{ $id }}" class="promo-bar promo-bar--{{ $mode }}{{ $class ? ' '.$class : '' }}" aria-label="{{ $label }}" data-promo-bar-group data-mode="{{ $mode }}" data-interval="{{ $interval }}" data-audience-cookie="{{ $cookie }}"{!! $sticky ? ' data-sticky' : '' !!}>
+<section id="{{ $id }}" class="promo-bar promo-bar--{{ $mode }}{{ $class ? ' '.$class : '' }}" aria-label="{{ $label }}" data-promo-bar-group data-mode="{{ $mode }}" data-interval="{{ $interval }}"{!! $limit ? ' data-limit="'.(int) $limit.'"' : '' !!} data-audience-cookie="{{ $cookie }}"{!! $sticky ? ' data-sticky' : '' !!}>
 @foreach ($bars as $index => $bar)
 @php
     $inactive = $mode === 'rotate' && $index > 0;
@@ -23,7 +23,7 @@
             <div class="promo-bar__message" data-promo-bar-message{!! $state ? ' hidden' : '' !!}>{!! $bar['message'] !!}</div>
 @if ($bar['countdown'])
             <p class="promo-bar__countdown" data-promo-bar-countdown data-ends="{{ $bar['countdown']['ends_iso'] }}">
-                <span data-promo-bar-js="countdown" hidden>{{ $bar['countdown']['label'] }} <span data-promo-bar-remaining aria-hidden="true"></span></span>
+                <span data-promo-bar-js="countdown" aria-hidden="true" hidden>{{ $bar['countdown']['label'] }} <span data-promo-bar-remaining></span></span>
                 <span data-promo-bar-fallback>{{ $bar['countdown']['ends_label'] }} <time datetime="{{ $bar['countdown']['ends_iso'] }}">{{ $bar['countdown']['ends_text'] }}</time></span>
             </p>
 @endif

@@ -19,6 +19,7 @@ class Page
         public readonly string $path,
         public readonly ?string $entry = null,
         public readonly ?string $collection = null,
+        public readonly ?string $origin = null,
     ) {}
 
     /**
@@ -37,7 +38,11 @@ class Page
 
         $entry ??= static::findByUri($request, $site);
 
-        return new static($site, $path, $entry?->id(), $entry?->collectionHandle());
+        // A translation also counts as the entry it was translated from, so a
+        // bar listing an entry shows on it in every site.
+        $origin = $entry && method_exists($entry, 'root') ? $entry->root()?->id() : null;
+
+        return new static($site, $path, $entry?->id(), $entry?->collectionHandle(), $origin !== $entry?->id() ? $origin : null);
     }
 
     public static function normalise(string $path): string
