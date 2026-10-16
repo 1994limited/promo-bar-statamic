@@ -18,6 +18,10 @@ Everywhere, only on some pages, or everywhere except some: by entry, by collecti
 
 A live countdown to the end, and a discount code with a Copy button. Without JavaScript, the end date and the code still show.
 
+## Made for phones
+
+Bars are smaller on phones. Give a bar a shorter phone message, and leave out its countdown, code or button there. Stacked bars show only the first. It's all CSS, so nothing jumps, even on cached pages.
+
 ## Dismissible
 
 Visitors can close a bar. It stays closed in their browser, comes back after a number of days if you like, and reappears when you change what it says.
