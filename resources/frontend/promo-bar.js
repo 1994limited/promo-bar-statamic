@@ -496,6 +496,24 @@
         return shown;
     }
 
+    // Turning a tablet, or resizing past the phone width, changes what shows.
+    function watchPhoneWidth(group) {
+        var width = parseInt(group.getAttribute('data-phone-width') || '0', 10);
+        if (!width || !window.matchMedia) return;
+        var query = window.matchMedia('(max-width: ' + width + 'px)');
+        var changed = function () {
+            // CSS may already have hidden the focused bar, sending focus
+            // to the page: then use where it was.
+            var focused = group.contains(document.activeElement) ? document.activeElement
+                : document.activeElement === document.body || !document.activeElement ? group._promoBarFocus : null;
+            var focusedBar = focused && focused.closest('[data-promo-bar]');
+            var shown = refresh(group);
+            if (focusedBar && (focusedBar.hidden || focusedBar.hasAttribute('inert'))) refocus(group, focusedBar, shown);
+            tick();
+        };
+        if (query.addEventListener) query.addEventListener('change', changed); else if (query.addListener) query.addListener(changed);
+    }
+
     function setUp(group) {
         if (group._promoBar) return;
         group._promoBar = true;
@@ -523,6 +541,7 @@
         });
 
         if (group.getAttribute('data-mode') === 'rotate') rotation(group);
+        watchPhoneWidth(group);
 
         refresh(group);
     }
@@ -538,24 +557,6 @@
                 groups.forEach(function (group) { group._promoBarFocus = group.contains(event.target) ? event.target : null; });
             });
         }
-
-        // Turning a tablet, or resizing past the phone width, changes what shows.
-        groups.forEach(function (group) {
-            var width = parseInt(group.getAttribute('data-phone-width') || '0', 10);
-            if (!width || !window.matchMedia) return;
-            var query = window.matchMedia('(max-width: ' + width + 'px)');
-            var changed = function () {
-                // CSS may already have hidden the focused bar, sending focus
-                // to the page: then use where it was.
-                var focused = group.contains(document.activeElement) ? document.activeElement
-                    : document.activeElement === document.body || !document.activeElement ? group._promoBarFocus : null;
-                var focusedBar = focused && focused.closest('[data-promo-bar]');
-                var shown = refresh(group);
-                if (focusedBar && (focusedBar.hidden || focusedBar.hasAttribute('inert'))) refocus(group, focusedBar, shown);
-                tick();
-            };
-            if (query.addEventListener) query.addEventListener('change', changed); else if (query.addListener) query.addListener(changed);
-        });
 
         tick();
         if (document.querySelector('[data-promo-bar-countdown], [data-promo-bar][data-ends]')) {
