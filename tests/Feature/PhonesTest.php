@@ -61,11 +61,11 @@ class PhonesTest extends TestCase
         $this->bar();
 
         $this->assertStringContainsString('promo-bar--stack promo-bar--phone-first', $this->antlers('{{ promo_bar mode="stack" }}'));
-        $this->assertStringNotContainsString('promo-bar--phone-first', $this->antlers('{{ promo_bar mode="rotate" }}'));
+        $this->assertDoesNotMatchRegularExpression('/class="promo-bar [^"]*promo-bar--phone-first/', $this->antlers('{{ promo_bar mode="rotate" }}'));
 
         $this->settings(['phone_first_only' => false]);
 
-        $this->assertStringNotContainsString('promo-bar--phone-first', $this->antlers('{{ promo_bar mode="stack" }}'));
+        $this->assertDoesNotMatchRegularExpression('/class="promo-bar [^"]*promo-bar--phone-first/', $this->antlers('{{ promo_bar mode="stack" }}'));
     }
 
     public function test_the_phone_width_is_in_the_stylesheet_and_page(): void
@@ -94,5 +94,39 @@ class PhonesTest extends TestCase
         $hash = $bar->contentHash();
 
         $this->assertNotSame($hash, $bar->set('phone_message', [['type' => 'text', 'text' => 'New']])->contentHash());
+    }
+
+    public function test_without_the_script_phones_get_the_next_bar_when_the_first_isnt_for_phones(): void
+    {
+        $this->bar(['title' => 'Desktop only', 'phone_show' => false]);
+        $this->bar(['title' => 'Members', 'audience' => 'signed_in']);
+        $this->bar(['title' => 'For phones']);
+        $this->bar(['title' => 'Later']);
+
+        $first = $this->antlers('{{ promo_bar mode="first" }}');
+
+        $this->assertMatchesRegularExpression('/class="promo-bar__bar[^"]*promo-bar--phone-fallback"[^>]*data-promo-bar-name="For phones"[^>]*>/', $first);
+        $this->assertDoesNotMatchRegularExpression('/data-promo-bar-name="For phones"[^>]* hidden>/', $first);
+        $this->assertMatchesRegularExpression('/data-promo-bar-name="Later"[^>]* hidden>/', $first);
+
+        $rotate = $this->antlers('{{ promo_bar mode="rotate" }}');
+
+        $this->assertMatchesRegularExpression('/is-inactive promo-bar--phone-fallback"[^>]*data-promo-bar-name="For phones"/', $rotate);
+        $this->assertDoesNotMatchRegularExpression('/data-promo-bar-name="For phones"[^>]* inert/', $rotate);
+    }
+
+    public function test_no_stand_in_when_the_first_bar_is_for_phones(): void
+    {
+        $this->bar(['title' => 'One']);
+        $this->bar(['title' => 'Two']);
+
+        $this->assertDoesNotMatchRegularExpression('/class="promo-bar__bar[^"]*promo-bar--phone-fallback/', $this->antlers('{{ promo_bar mode="first" }}'));
+    }
+
+    public function test_the_stand_in_is_only_shown_on_phones(): void
+    {
+        $css = app(Styles::class)->css();
+
+        $this->assertMatchesRegularExpression('/\.promo-bar--phone-fallback \{ display: none; \}.*@media \(max-width: 640px\).*\.promo-bar--phone-fallback \{ display: block; \}/s', $css);
     }
 }

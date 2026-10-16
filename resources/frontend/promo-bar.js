@@ -63,11 +63,15 @@
         var limit = parseInt(group.getAttribute('data-limit') || '0', 10);
         if (mode === 'first') eligible = eligible.slice(0, 1);
         else if (limit > 0) eligible = eligible.slice(0, limit);
+        // Stacked bars on phones: only the first (CSS does the same before this runs).
+        if (mode === 'stack' && phone && group.classList.contains('promo-bar--phone-first')) eligible = eligible.slice(0, 1);
         var active = group.querySelector('[data-promo-bar]:not(.is-inactive):not([hidden])');
         if (mode === 'rotate' && eligible.indexOf(active) < 0) active = eligible[0];
 
         bars.forEach(function (bar) {
             var shown = eligible.indexOf(bar) > -1;
+            // From here the script decides; the no-script stand-in is done with.
+            bar.classList.remove('promo-bar--phone-fallback');
             bar.hidden = !shown;
             if (mode === 'rotate') {
                 var inactive = bar !== active;
@@ -527,12 +531,29 @@
         all(document, '[data-promo-bar-group]').forEach(setUp);
         if (!groups.length) return;
 
+        // Where the keyboard last was in each set of bars (once, however often start() runs).
+        if (!start.listening) {
+            start.listening = true;
+            document.addEventListener('focusin', function (event) {
+                groups.forEach(function (group) { group._promoBarFocus = group.contains(event.target) ? event.target : null; });
+            });
+        }
+
         // Turning a tablet, or resizing past the phone width, changes what shows.
         groups.forEach(function (group) {
             var width = parseInt(group.getAttribute('data-phone-width') || '0', 10);
             if (!width || !window.matchMedia) return;
             var query = window.matchMedia('(max-width: ' + width + 'px)');
-            var changed = function () { refresh(group); tick(); };
+            var changed = function () {
+                // CSS may already have hidden the focused bar, sending focus
+                // to the page: then use where it was.
+                var focused = group.contains(document.activeElement) ? document.activeElement
+                    : document.activeElement === document.body || !document.activeElement ? group._promoBarFocus : null;
+                var focusedBar = focused && focused.closest('[data-promo-bar]');
+                var shown = refresh(group);
+                if (focusedBar && (focusedBar.hidden || focusedBar.hasAttribute('inert'))) refocus(group, focusedBar, shown);
+                tick();
+            };
             if (query.addEventListener) query.addEventListener('change', changed); else if (query.addListener) query.addListener(changed);
         });
 

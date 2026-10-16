@@ -6,6 +6,10 @@
  */
 
 .promo-bar--phone-hidden { display: none !important; }
+
+/* Without the script: the bar standing in for a first bar that isn't for phones. */
+.promo-bar--phone-fallback { display: block; }
+.promo-bar--rotate > .promo-bar__bar.promo-bar--phone-fallback { visibility: visible; opacity: 1; }
 .promo-bar__message--wide { display: none; }
 .promo-bar__message--phone { display: block; }
 

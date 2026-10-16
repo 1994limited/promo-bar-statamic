@@ -180,3 +180,4 @@
 
 /* Phones: see promo-bar-phone.css, added under a media query for the phone width in the settings. */
 .promo-bar__message--phone { display: none; }
+.promo-bar--phone-fallback { display: none; }

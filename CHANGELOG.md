@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.1 (unreleased)
+
+### Fixed
+- **Without JavaScript, phones show the next bar** when the first isn't for phones, with one bar at a time (first) or rotating. Before, they showed none.
+- **Stacked bars on phones count a view only for the bar shown**, not the ones hidden below it.
+- **Keyboard focus isn't lost** when turning a tablet or resizing past the phone width hides the bar it was in: it moves to the bar still showing, or the first thing after the bars.
+
 ## 1.1.0 (2026-10-16)
 
 ### Added
