@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.1 (unreleased)
+## 1.1.1 (2026-10-16)
 
 ### Fixed
 - **Without JavaScript, phones show the next bar** when the first isn't for phones, with one bar at a time (first) or rotating. Before, they showed none.
