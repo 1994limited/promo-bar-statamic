@@ -2,7 +2,7 @@
 
 Harbour Coffee is a small made-up coffee shop, built with Cargo and Promo Bar, to try every feature on.
 
-![Harbour Coffee on a phone](images/shop-mobile.png)
+![Harbour Coffee on a phone](https://raw.githubusercontent.com/1994limited/statamic-marketplace/main/promo-bar/charts/shop-mobile.png)
 
 It has five bars:
 

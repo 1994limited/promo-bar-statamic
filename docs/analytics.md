@@ -6,7 +6,7 @@ The one exception is a custom **Also send to a URL**: Promo Bar sends to it dire
 
 Set it up under **Tools → Addons → Promo Bar → Settings → Analytics**.
 
-![The Analytics settings](images/cp-analytics.png)
+![The Analytics settings](https://raw.githubusercontent.com/1994limited/statamic-marketplace/main/promo-bar/charts/cp-analytics.png)
 
 ## Events
 

@@ -1,6 +1,6 @@
 # Making bars
 
-![Content → Promo Bars: five bars with their status, dates, where they show and style](images/cp-bars.png)
+![Content → Promo Bars: five bars with their status, dates, where they show and style](https://raw.githubusercontent.com/1994limited/statamic-marketplace/main/promo-bar/charts/cp-bars.png)
 
 Bars live under **Content → Promo Bars**. The list shows each bar's status (Live, Scheduled, Ended or Off), its dates, where it shows and its style. Switch a bar on or off from the list, and use each row's menu to edit, duplicate, move or delete it.
 
@@ -12,7 +12,7 @@ When more than one bar is live on a page, their order decides what shows: the to
 
 The form has a live preview at the top, in the bar's style.
 
-![Editing the Autumn sale bar, with its preview](images/cp-bar.png)
+![Editing the Autumn sale bar, with its preview](https://raw.githubusercontent.com/1994limited/statamic-marketplace/main/promo-bar/charts/cp-bar.png)
 
 ### Content
 
@@ -32,7 +32,7 @@ The form has a live preview at the top, in the bar's style.
 
 ### Where
 
-![The Where tab: only on the products collection, /shop and /basket](images/cp-where.png)
+![The Where tab: only on the products collection, /shop and /basket](https://raw.githubusercontent.com/1994limited/statamic-marketplace/main/promo-bar/charts/cp-where.png)
 
 - **Sites** (multisite only): leave empty for every site.
 - **Pages**: everywhere, only on some pages, or everywhere except some. "Some" is any of:
@@ -60,7 +60,7 @@ With bars stacked, phones show only the first one the visitor can see (turn this
 
 The form's preview has a **Desktop / Phone** switch, to see each.
 
-![The Autumn sale bar on a phone: its phone message, a short countdown, the code and the button on two lines](images/shop-mobile.png)
+![The Autumn sale bar on a phone: its phone message, a short countdown, the code and the button on two lines](https://raw.githubusercontent.com/1994limited/statamic-marketplace/main/promo-bar/charts/shop-mobile.png)
 
 Both messages are in the page, and the stylesheet picks which shows, so it works on cached pages and without JavaScript, and nothing jumps. Screen readers read only the one shown.
 

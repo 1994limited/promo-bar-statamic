@@ -13,7 +13,7 @@ Every bar has a style: one of six presets, or **None**, for sites that style bar
 
 ## Editing the presets
 
-![The Styles settings: every preset previewed](images/cp-styles.png)
+![The Styles settings: every preset previewed](https://raw.githubusercontent.com/1994limited/statamic-marketplace/main/promo-bar/charts/cp-styles.png)
 
 **Tools → Addons → Promo Bar → Settings → Styles** shows every preset as it will look, and changes as you edit. For each preset:
 
@@ -30,7 +30,7 @@ Which preset bars use unless they choose one is under **General → Default styl
 
 ## A bar's own colours
 
-![A bar's Style tab: its preset, and Own colours](images/cp-bar-style.png)
+![A bar's Style tab: its preset, and Own colours](https://raw.githubusercontent.com/1994limited/statamic-marketplace/main/promo-bar/charts/cp-bar-style.png)
 
 A bar can keep its preset but change its colours: turn on **Own colours** on the bar's **Style** tab. The bar's preview shows the result and any contrast warning.
 

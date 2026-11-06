@@ -37,7 +37,7 @@ To clear the cache your own way, set `static_caching.invalidate` to `false` in `
 
 ## Signed-in and guest bars
 
-![The same cached page for a signed-in member: the members' bar instead of the newsletter](images/member.png)
+![The same cached page for a signed-in member: the members' bar instead of the newsletter](https://raw.githubusercontent.com/1994limited/statamic-marketplace/main/promo-bar/charts/member.png)
 
 On cached pages, the script can't ask the server who's looking. Instead, when someone signs in Promo Bar sets a small cookie, `promo_bar_audience`: `1` for signed in, then their user groups (`1:members,trade`). It's removed when they sign out, and put right on any page Laravel draws (for people already signed in when you installed the addon, or whose groups have changed). It's only set on sites with a bar for signed-in visitors or guests.
 

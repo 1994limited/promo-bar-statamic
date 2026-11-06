@@ -9,7 +9,7 @@ On a bar's **Content** tab, turn on **Show free delivery progress** and choose w
 - **An amount**: the basket total for free delivery, in the site's currency.
 - **A Cargo free shipping discount**: an automatic Free Shipping discount (no code) with a minimum order value. The bar uses that value, and ends when the discount does (its end date, or when it's used up or deleted).
 
-![A shop page with free delivery progress under a sale bar](images/shop.png)
+![A shop page with free delivery progress under a sale bar](https://raw.githubusercontent.com/1994limited/statamic-marketplace/main/promo-bar/charts/shop.png)
 
 Visitors with something in their basket see:
 
